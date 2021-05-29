@@ -35,12 +35,6 @@ inline fun Float.isZero(epsilon: Float = FloatEpsilon) = abs(this) <= epsilon
 
 inline fun Double.isZero(epsilon: Double = DoubleEpsilon) = abs(this) <= epsilon
 
-infix fun Long.smul(other: Long) = if (this == 0L || other <= Long.MAX_VALUE / this) this * other else Long.MAX_VALUE
-
-infix fun Long.sadd(other: Long) = if (this == 0L || other <= Long.MAX_VALUE - this) this + other else Long.MAX_VALUE
-
-fun Int.exp2() = if (this < Long.SIZE_BITS - 1) 1L shl this else Long.MAX_VALUE
-
 inline fun Int.clamp(minimum: Int, maximum: Int) = when {
     this < minimum -> minimum
     this > maximum -> maximum
