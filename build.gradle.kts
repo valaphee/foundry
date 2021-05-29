@@ -6,19 +6,14 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("com.github.johnrengelman.shadow") version "6.0.0"
+    id("com.palantir.git-version") version "0.12.3"
     `java-library`
     kotlin("jvm") version "1.5.10"
     `maven-publish`
-    id("com.palantir.git-version") version "0.12.3"
-    id("net.linguica.maven-settings") version "0.5"
-    id("org.hibernate.build.maven-repo-auth") version "3.0.2"
     signing
 }
 
 allprojects {
-    group = "com.valaphee"
-
     repositories {
         mavenLocal()
         jcenter()
@@ -31,9 +26,9 @@ subprojects {
     apply(plugin = "java-library")
     apply(plugin = "kotlin")
     apply(plugin = "maven-publish")
-    apply(plugin = "org.hibernate.build.maven-repo-auth")
     apply(plugin = "signing")
 
+    group = "com.valaphee"
     val gitVersion: groovy.lang.Closure<String> by extra
     version = gitVersion()
 
@@ -58,6 +53,11 @@ subprojects {
         withType<Test> { useJUnitPlatform() }
     }
 
+    java {
+        withJavadocJar()
+        withSourcesJar()
+    }
+
     signing {
         useGpgCmd()
         sign(publishing.publications)
@@ -66,7 +66,30 @@ subprojects {
     publishing {
         publications {
             create<MavenPublication>("maven") {
-                artifactId = project.name
+                pom.apply {
+                    name.set(project.name)
+                    description.set("Where software gets made")
+                    url.set("https://github.com/Valaphee/foundry")
+                    scm {
+                        connection.set("https://github.com/Valaphee/foundry.git")
+                        developerConnection.set("https://github.com/Valaphee/foundry.git")
+                        url.set("https://github.com/Valaphee/foundry")
+                    }
+                    licenses {
+                        license {
+                            name.set("All rights reserved")
+                            url.set("https://raw.githubusercontent.com/Valaphee/foundry/master/LICENSE.txt")
+                        }
+                    }
+                    developers {
+                        developer {
+                            id.set("valaphee")
+                            name.set("Valaphee")
+                            email.set("iam@valaphee.com")
+                            roles.add("owner")
+                        }
+                    }
+                }
 
                 from(components["java"])
             }
