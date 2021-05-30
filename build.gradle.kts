@@ -39,14 +39,14 @@ subprojects {
 
     tasks {
         withType<JavaCompile> {
-            sourceCompatibility = "1.8"/*"15"*/
-            targetCompatibility = "1.8"/*"15"*/
+            sourceCompatibility = "16"
+            targetCompatibility = "16"
         }
 
-        withType<KotlinCompile>().configureEach {
+        withType<KotlinCompile> {
             kotlinOptions {
-                jvmTarget = "1.8"/*"15"*/
-                freeCompilerArgs = listOf("-Xinline-classes", "-Xjvm-default=compatibility", "-Xstring-concat=inline"/*"-Xstring-concat=indy-with-constants"*/)
+                jvmTarget = "16"
+                freeCompilerArgs = listOf("-Xlambdas=indy", "-Xsam-conversions=indy")
             }
         }
 
