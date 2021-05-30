@@ -17,23 +17,21 @@ import kotlin.math.tan
 open class Float4x4 {
     var matrix = FloatArray(16)
         protected set
-    var offset = 0
-        protected set
 
     init {
         setIdentity()
     }
 
-    operator fun get(index: Int) = matrix[offset + index]
+    operator fun get(index: Int) = matrix[index]
 
-    operator fun get(row: Int, column: Int) = matrix[offset + column * 4 + row]
+    operator fun get(row: Int, column: Int) = matrix[column * 4 + row]
 
     operator fun set(index: Int, value: Float) {
-        matrix[offset + index] = value
+        matrix[index] = value
     }
 
     operator fun set(row: Int, column: Int, value: Float) {
-        matrix[offset + column * 4 + row] = value
+        matrix[column * 4 + row] = value
     }
 
     fun getRow(row: Int, result: MutableFloat4): MutableFloat4 {
@@ -81,27 +79,27 @@ open class Float4x4 {
     }
 
     fun set(value: Float4x4) = apply {
-        for (i in 0..15) matrix[offset + i] = value.matrix[value.offset + i]
+        for (i in 0..15) matrix[i] = value.matrix[i]
     }
 
     fun set(value: Double4x4) = apply {
-        for (i in 0..15) matrix[offset + i] = value.matrix[value.offset + i].toFloat()
+        for (i in 0..15) matrix[i] = value.matrix[i].toFloat()
     }
 
     fun set(value: List<Float>) = apply {
-        for (i in 0..15) matrix[offset + i] = value[i]
+        for (i in 0..15) matrix[i] = value[i]
     }
 
     fun setZero() = apply {
-        for (i in 0..15) matrix[offset + i] = 0.0f
+        for (i in 0..15) matrix[i] = 0.0f
     }
 
     fun setIdentity() = apply {
         setZero()
-        matrix[offset] = 1.0f
-        matrix[offset + 5] = 1.0f
-        matrix[offset + 10] = 1.0f
-        matrix[offset + 15] = 1.0f
+        matrix[0] = 1.0f
+        matrix[5] = 1.0f
+        matrix[10] = 1.0f
+        matrix[15] = 1.0f
     }
 
     fun setRotate(value: Float, axisX: Float, axisY: Float, axisZ: Float) = apply {
@@ -109,48 +107,48 @@ open class Float4x4 {
         var axisYVar = axisY
         var axisZVar = axisZ
 
-        matrix[offset + 3] = 0.0f
-        matrix[offset + 7] = 0.0f
-        matrix[offset + 11] = 0.0f
-        matrix[offset + 12] = 0.0f
-        matrix[offset + 13] = 0.0f
-        matrix[offset + 14] = 0.0f
-        matrix[offset + 15] = 1.0f
+        matrix[3] = 0.0f
+        matrix[7] = 0.0f
+        matrix[11] = 0.0f
+        matrix[12] = 0.0f
+        matrix[13] = 0.0f
+        matrix[14] = 0.0f
+        matrix[15] = 1.0f
 
         val rad = value.toRad()
         val sin = sin(rad)
         val cos = cos(rad)
 
         if (axisXVar == 1.0f && axisYVar == 0.0f && axisZVar == 0.0f) {
-            matrix[offset + 5] = cos
-            matrix[offset + 10] = cos
-            matrix[offset + 6] = sin
-            matrix[offset + 9] = -sin
-            matrix[offset + 1] = 0.0f
-            matrix[offset + 2] = 0.0f
-            matrix[offset + 4] = 0.0f
-            matrix[offset + 8] = 0.0f
-            matrix[offset + 0] = 1.0f
+            matrix[5] = cos
+            matrix[10] = cos
+            matrix[6] = sin
+            matrix[9] = -sin
+            matrix[1] = 0.0f
+            matrix[2] = 0.0f
+            matrix[4] = 0.0f
+            matrix[8] = 0.0f
+            matrix[0] = 1.0f
         } else if (axisXVar == 0.0f && axisYVar == 1.0f && axisZVar == 0.0f) {
-            matrix[offset + 0] = cos
-            matrix[offset + 10] = cos
-            matrix[offset + 8] = sin
-            matrix[offset + 2] = -sin
-            matrix[offset + 1] = 0.0f
-            matrix[offset + 4] = 0.0f
-            matrix[offset + 6] = 0.0f
-            matrix[offset + 9] = 0.0f
-            matrix[offset + 5] = 1.0f
+            matrix[0] = cos
+            matrix[10] = cos
+            matrix[8] = sin
+            matrix[2] = -sin
+            matrix[1] = 0.0f
+            matrix[4] = 0.0f
+            matrix[6] = 0.0f
+            matrix[9] = 0.0f
+            matrix[5] = 1.0f
         } else if (axisXVar == 0.0f && axisYVar == 0.0f && axisZVar == 1.0f) {
-            matrix[offset + 0] = cos
-            matrix[offset + 5] = cos
-            matrix[offset + 1] = sin
-            matrix[offset + 4] = -sin
-            matrix[offset + 2] = 0.0f
-            matrix[offset + 6] = 0.0f
-            matrix[offset + 8] = 0.0f
-            matrix[offset + 9] = 0.0f
-            matrix[offset + 10] = 1.0f
+            matrix[0] = cos
+            matrix[5] = cos
+            matrix[1] = sin
+            matrix[4] = -sin
+            matrix[2] = 0.0f
+            matrix[6] = 0.0f
+            matrix[8] = 0.0f
+            matrix[9] = 0.0f
+            matrix[10] = 1.0f
         } else {
             val length = sqrt(axisXVar * axisXVar + axisYVar * axisYVar + axisZVar * axisZVar)
             if (!equals(length, 1.0f)) {
@@ -167,15 +165,15 @@ open class Float4x4 {
             val xs = axisXVar * sin
             val ys = axisYVar * sin
             val zs = axisZVar * sin
-            matrix[offset + 0] = axisXVar * axisXVar * vers + cos
-            matrix[offset + 4] = xy * vers - zs
-            matrix[offset + 8] = zx * vers + ys
-            matrix[offset + 1] = xy * vers + zs
-            matrix[offset + 5] = axisYVar * axisYVar * vers + cos
-            matrix[offset + 9] = yz * vers - xs
-            matrix[offset + 2] = zx * vers - ys
-            matrix[offset + 6] = yz * vers + xs
-            matrix[offset + 10] = axisZVar * axisZVar * vers + cos
+            matrix[0] = axisXVar * axisXVar * vers + cos
+            matrix[4] = xy * vers - zs
+            matrix[8] = zx * vers + ys
+            matrix[1] = xy * vers + zs
+            matrix[5] = axisYVar * axisYVar * vers + cos
+            matrix[9] = yz * vers - xs
+            matrix[2] = zx * vers - ys
+            matrix[6] = yz * vers + xs
+            matrix[10] = axisZVar * axisZVar * vers + cos
         }
     }
 
@@ -235,22 +233,22 @@ open class Float4x4 {
         sy *= rls
         sz *= rls
 
-        matrix[offset + 0] = sx
-        matrix[offset + 1] = sy * fz - sz * fy
-        matrix[offset + 2] = -fx
-        matrix[offset + 3] = 0.0f
-        matrix[offset + 4] = sy
-        matrix[offset + 5] = sz * fx - sx * fz
-        matrix[offset + 6] = -fy
-        matrix[offset + 7] = 0.0f
-        matrix[offset + 8] = sz
-        matrix[offset + 9] = sx * fy - sy * fx
-        matrix[offset + 10] = -fz
-        matrix[offset + 11] = 0.0f
-        matrix[offset + 12] = 0.0f
-        matrix[offset + 13] = 0.0f
-        matrix[offset + 14] = 0.0f
-        matrix[offset + 15] = 1.0f
+        matrix[0] = sx
+        matrix[1] = sy * fz - sz * fy
+        matrix[2] = -fx
+        matrix[3] = 0.0f
+        matrix[4] = sy
+        matrix[5] = sz * fx - sx * fz
+        matrix[6] = -fy
+        matrix[7] = 0.0f
+        matrix[8] = sz
+        matrix[9] = sx * fy - sy * fx
+        matrix[10] = -fz
+        matrix[11] = 0.0f
+        matrix[12] = 0.0f
+        matrix[13] = 0.0f
+        matrix[14] = 0.0f
+        matrix[15] = 1.0f
 
         translate(-position.x, -position.y, -position.z)
     }
@@ -263,44 +261,44 @@ open class Float4x4 {
         val width = 1.0f / (right - left)
         val height = 1.0f / (top - bottom)
         val depth = 1.0f / (far - near)
-        matrix[offset + 0] = 2.0f * width
-        matrix[offset + 5] = 2.0f * height
-        matrix[offset + 10] = -2.0f * depth
-        matrix[offset + 12] = -(right + left) * width
-        matrix[offset + 13] = -(top + bottom) * height
-        matrix[offset + 14] = -(far + near) * depth
-        matrix[offset + 15] = 1.0f
-        matrix[offset + 1] = 0.0f
-        matrix[offset + 2] = 0.0f
-        matrix[offset + 3] = 0.0f
-        matrix[offset + 4] = 0.0f
-        matrix[offset + 6] = 0.0f
-        matrix[offset + 7] = 0.0f
-        matrix[offset + 8] = 0.0f
-        matrix[offset + 9] = 0.0f
-        matrix[offset + 11] = 0.0f
+        matrix[0] = 2.0f * width
+        matrix[5] = 2.0f * height
+        matrix[10] = -2.0f * depth
+        matrix[12] = -(right + left) * width
+        matrix[13] = -(top + bottom) * height
+        matrix[14] = -(far + near) * depth
+        matrix[15] = 1.0f
+        matrix[1] = 0.0f
+        matrix[2] = 0.0f
+        matrix[3] = 0.0f
+        matrix[4] = 0.0f
+        matrix[6] = 0.0f
+        matrix[7] = 0.0f
+        matrix[8] = 0.0f
+        matrix[9] = 0.0f
+        matrix[11] = 0.0f
     }
 
     fun setPerspective(fovY: Float, aspect: Float, near: Float, far: Float) = apply {
         val value = 1.0f / tan(fovY * (PI / 360.0)).toFloat()
         val rangeReciprocal = 1.0f / (near - far)
 
-        matrix[offset + 0] = value / aspect
-        matrix[offset + 1] = 0.0f
-        matrix[offset + 2] = 0.0f
-        matrix[offset + 3] = 0.0f
-        matrix[offset + 4] = 0.0f
-        matrix[offset + 5] = value
-        matrix[offset + 6] = 0.0f
-        matrix[offset + 7] = 0.0f
-        matrix[offset + 8] = 0.0f
-        matrix[offset + 9] = 0.0f
-        matrix[offset + 10] = (far + near) * rangeReciprocal
-        matrix[offset + 11] = -1.0f
-        matrix[offset + 12] = 0.0f
-        matrix[offset + 13] = 0.0f
-        matrix[offset + 14] = 2.0f * far * near * rangeReciprocal
-        matrix[offset + 15] = 0.0f
+        matrix[0] = value / aspect
+        matrix[1] = 0.0f
+        matrix[2] = 0.0f
+        matrix[3] = 0.0f
+        matrix[4] = 0.0f
+        matrix[5] = value
+        matrix[6] = 0.0f
+        matrix[7] = 0.0f
+        matrix[8] = 0.0f
+        matrix[9] = 0.0f
+        matrix[10] = (far + near) * rangeReciprocal
+        matrix[11] = -1.0f
+        matrix[12] = 0.0f
+        matrix[13] = 0.0f
+        matrix[14] = 2.0f * far * near * rangeReciprocal
+        matrix[15] = 0.0f
     }
 
     fun getOrigin(result: MutableFloat3): MutableFloat3 {
@@ -338,7 +336,6 @@ open class Float4x4 {
 
     fun getRotation(result: MutableFloat4): MutableFloat4 {
         val trace = this[0, 0] + this[1, 1] + this[2, 2]
-
         if (trace > 0.0f) {
             var s = sqrt(trace + 1.0f)
             result.w = s * 0.5f
@@ -367,11 +364,11 @@ open class Float4x4 {
 
     fun transpose(result: Float4x4): Float4x4 {
         for (i in 0..3) {
-            val baseIndex = i * 4 + offset
-            result.matrix[i + result.offset] = matrix[baseIndex]
-            result.matrix[i + 4 + result.offset] = matrix[baseIndex + 1]
-            result.matrix[i + 8 + result.offset] = matrix[baseIndex + 2]
-            result.matrix[i + 12 + result.offset] = matrix[baseIndex + 3]
+            val baseIndex = i * 4
+            result.matrix[i] = matrix[baseIndex]
+            result.matrix[i + 4] = matrix[baseIndex + 1]
+            result.matrix[i + 8] = matrix[baseIndex + 2]
+            result.matrix[i + 12] = matrix[baseIndex + 3]
         }
         return result
     }
@@ -382,22 +379,22 @@ open class Float4x4 {
     }
 
     fun invert(result: Float4x4, epsilon: Float = 0.0f): Boolean {
-        val src0 = matrix[offset + 0]
-        val src4 = matrix[offset + 1]
-        val src8 = matrix[offset + 2]
-        val src12 = matrix[offset + 3]
-        val src1 = matrix[offset + 4]
-        val src5 = matrix[offset + 5]
-        val src9 = matrix[offset + 6]
-        val src13 = matrix[offset + 7]
-        val src2 = matrix[offset + 8]
-        val src6 = matrix[offset + 9]
-        val src10 = matrix[offset + 10]
-        val src14 = matrix[offset + 11]
-        val src3 = matrix[offset + 12]
-        val src7 = matrix[offset + 13]
-        val src11 = matrix[offset + 14]
-        val src15 = matrix[offset + 15]
+        val src0 = matrix[0]
+        val src4 = matrix[1]
+        val src8 = matrix[2]
+        val src12 = matrix[3]
+        val src1 = matrix[4]
+        val src5 = matrix[5]
+        val src9 = matrix[6]
+        val src13 = matrix[7]
+        val src2 = matrix[8]
+        val src6 = matrix[9]
+        val src10 = matrix[10]
+        val src14 = matrix[11]
+        val src3 = matrix[12]
+        val src7 = matrix[13]
+        val src11 = matrix[14]
+        val src15 = matrix[15]
         val atmp0 = src10 * src15
         val atmp1 = src11 * src14
         val atmp2 = src9 * src15
@@ -441,28 +438,28 @@ open class Float4x4 {
         var determinant = src0 * dst0 + src1 * dst1 + src2 * dst2 + src3 * dst3
         return if (determinant.isZero(epsilon)) false else {
             determinant = 1.0f / determinant
-            result.matrix[result.offset] = dst0 * determinant
-            result.matrix[1 + result.offset] = dst1 * determinant
-            result.matrix[2 + result.offset] = dst2 * determinant
-            result.matrix[3 + result.offset] = dst3 * determinant
-            result.matrix[4 + result.offset] = dst4 * determinant
-            result.matrix[5 + result.offset] = dst5 * determinant
-            result.matrix[6 + result.offset] = dst6 * determinant
-            result.matrix[7 + result.offset] = dst7 * determinant
-            result.matrix[8 + result.offset] = dst8 * determinant
-            result.matrix[9 + result.offset] = dst9 * determinant
-            result.matrix[10 + result.offset] = dst10 * determinant
-            result.matrix[11 + result.offset] = dst11 * determinant
-            result.matrix[12 + result.offset] = dst12 * determinant
-            result.matrix[13 + result.offset] = dst13 * determinant
-            result.matrix[14 + result.offset] = dst14 * determinant
-            result.matrix[15 + result.offset] = dst15 * determinant
+            result.matrix[0] = dst0 * determinant
+            result.matrix[1] = dst1 * determinant
+            result.matrix[2] = dst2 * determinant
+            result.matrix[3] = dst3 * determinant
+            result.matrix[4] = dst4 * determinant
+            result.matrix[5] = dst5 * determinant
+            result.matrix[6] = dst6 * determinant
+            result.matrix[7] = dst7 * determinant
+            result.matrix[8] = dst8 * determinant
+            result.matrix[9] = dst9 * determinant
+            result.matrix[10] = dst10 * determinant
+            result.matrix[11] = dst11 * determinant
+            result.matrix[12] = dst12 * determinant
+            result.matrix[13] = dst13 * determinant
+            result.matrix[14] = dst14 * determinant
+            result.matrix[15] = dst15 * determinant
             true
         }
     }
 
     fun add(value: Float4x4) = apply {
-        for (i in 0..15) matrix[offset + i] += value.matrix[value.offset + i]
+        for (i in 0..15) matrix[i] += value.matrix[i]
     }
 
     fun mul(value: Float4x4) = apply {
@@ -474,27 +471,21 @@ open class Float4x4 {
     fun mul(value: Float4x4, result: Float4x4): Float4x4 {
         for (i in 0..3) for (j in 0..3) {
             var x = 0.0f
-            for (k in 0..3) x += this[offset + j + k * 4] * value[value.offset + i * 4 + k]
-            result[result.offset + i * 4 + j] = x
+            for (k in 0..3) x += this[j + k * 4] * value[i * 4 + k]
+            result[i * 4 + j] = x
         }
         return result
     }
 
     fun translate(x: Float, y: Float, z: Float) = apply {
-        for (i in 0..3) {
-            val offsetIndex = offset + i
-            matrix[12 + offsetIndex] += matrix[offsetIndex] * x + matrix[4 + offsetIndex] * y + matrix[8 + offsetIndex] * z
-        }
+        for (i in 0..3) matrix[12 + i] += matrix[i] * x + matrix[4 + i] * y + matrix[8 + i] * z
     }
 
     fun translate(value: Float3) = translate(value.x, value.y, value.z)
 
     fun translate(x: Float, y: Float, z: Float, result: Float4x4): Float4x4 {
-        for (i in 0..11) result.matrix[result.offset + i] = matrix[offset + i]
-        for (i in 0..3) {
-            val offsetIndex = offset + i
-            result.matrix[result.offset + 12 + i] = matrix[offsetIndex] * x + matrix[4 + offsetIndex] * y + matrix[8 + offsetIndex] * z + matrix[12 + offsetIndex]
-        }
+        for (i in 0..11) result.matrix[i] = matrix[i]
+        for (i in 0..3) result.matrix[12 + i] = matrix[i] * x + matrix[4 + i] * y + matrix[8 + i] * z + matrix[12 + i]
         return result
     }
 
@@ -512,10 +503,9 @@ open class Float4x4 {
 
     fun scale(x: Float, y: Float, z: Float) = apply {
         for (i in 0..3) {
-            val offsetIndex = offset + i
-            matrix[offsetIndex] *= x
-            matrix[4 + offsetIndex] *= y
-            matrix[8 + offsetIndex] *= z
+            matrix[i] *= x
+            matrix[4 + i] *= y
+            matrix[8 + i] *= z
         }
     }
 
@@ -523,19 +513,15 @@ open class Float4x4 {
 
     fun scale(x: Float, y: Float, z: Float, result: Float4x4): Float4x4 {
         for (i in 0..3) {
-            val resultOffsetIndex = result.offset + i
-            val offsetIndex = offset + i
-            result.matrix[resultOffsetIndex] = matrix[offsetIndex] * x
-            result.matrix[4 + resultOffsetIndex] = matrix[4 + offsetIndex] * y
-            result.matrix[8 + resultOffsetIndex] = matrix[8 + offsetIndex] * z
-            result.matrix[12 + resultOffsetIndex] = matrix[12 + offsetIndex]
+            result.matrix[i] = matrix[i] * x
+            result.matrix[4 + i] = matrix[4 + i] * y
+            result.matrix[8 + i] = matrix[8 + i] * z
+            result.matrix[12 + i] = matrix[12 + i]
         }
         return result
     }
 
-    fun resetScale() = apply {
-        scale(1.0f / sqrt(this[0, 0] * this[0, 0] + this[1, 0] * this[1, 0] + this[2, 0] * this[2, 0]), 1.0f / sqrt(this[0, 1] * this[0, 1] + this[1, 1] * this[1, 1] + this[2, 1] * this[2, 1]), 1.0f / sqrt(this[0, 2] * this[0, 2] + this[1, 2] * this[1, 2] + this[2, 2] * this[2, 2]))
-    }
+    fun resetScale() = apply { scale(1.0f / sqrt(this[0, 0] * this[0, 0] + this[1, 0] * this[1, 0] + this[2, 0] * this[2, 0]), 1.0f / sqrt(this[0, 1] * this[0, 1] + this[1, 1] * this[1, 1] + this[2, 1] * this[2, 1]), 1.0f / sqrt(this[0, 2] * this[0, 2] + this[1, 2] * this[1, 2] + this[2, 2] * this[2, 2])) }
 
     fun transform(value: MutableFloat3, w: Float = 1.0f): MutableFloat3 {
         val x = value.x * this[0, 0] + value.y * this[0, 1] + value.z * this[0, 2] + w * this[0, 3]
@@ -568,10 +554,10 @@ open class Float4x4 {
     }
 
     fun toList() = listOf(
-        matrix[offset + 0], matrix[offset + 1], matrix[offset + 2], matrix[offset + 3],
-        matrix[offset + 4], matrix[offset + 5], matrix[offset + 6], matrix[offset + 7],
-        matrix[offset + 8], matrix[offset + 9], matrix[offset + 10], matrix[offset + 11],
-        matrix[offset + 12], matrix[offset + 13], matrix[offset + 14], matrix[offset + 15],
+        matrix[0], matrix[1], matrix[2], matrix[3],
+        matrix[4], matrix[5], matrix[6], matrix[7],
+        matrix[8], matrix[9], matrix[10], matrix[11],
+        matrix[12], matrix[13], matrix[14], matrix[15],
     )
 }
 
@@ -585,26 +571,21 @@ class Float4x4Stack(
         const val DefaultStackSize = 32
     }
 
-    var stackIndex = 0
-        private set(value) {
-            field = value
-            offset = value * 16
-        }
-
-    init {
-        matrix = FloatArray(16 * stackSize)
-        setIdentity()
-    }
+    private var stackIndex = 0
+    private val stack = FloatArray(16 * stackSize)
 
     fun push() = apply {
         require(stackIndex < stackSize)
-        repeat(16) { matrix[offset + 16 + it] = matrix[offset + it] }
+        val offset = stackIndex * 16
+        for (i in 0..15) stack[offset + i] = matrix[i]
         stackIndex++
     }
 
     fun pop() = apply {
         require(stackIndex > 0)
         stackIndex--
+        val offset = stackIndex * 16
+        for (i in 0..15) matrix[i] = stack[offset + i]
     }
 
     fun reset() = apply {
