@@ -16,11 +16,10 @@ import kotlin.concurrent.withLock
 class DefaultApplicationContext(
     internal val components: DefaultComponents<Any> = DefaultComponents()
 ) : ApplicationContext, Components<Any> by components {
-    private val factoryProducerRegistry: MutableMap<String, ComponentFactoryProducer> =
-        mutableMapOf(
-            "singleton" to SingletonComponentFactoryProducer(components),
-            "prototype" to PrototypeComponentFactoryProducer(components)
-        )
+    private val factoryProducerRegistry: MutableMap<String, ComponentFactoryProducer> = mutableMapOf(
+        "singleton" to SingletonComponentFactoryProducer(components),
+        "prototype" to PrototypeComponentFactoryProducer(components)
+    )
     private val lock: ReadWriteLock = ReentrantReadWriteLock()
 
     override fun registerScope(scope: String, factoryProducer: ComponentFactoryProducer) = lock.writeLock().withLock { factoryProducerRegistry[scope] = factoryProducer }
@@ -34,13 +33,12 @@ class DefaultApplicationContext(
         components.put(factoryProducer.produceComponentFactory(type, name ?: components.computeName(type), constructor).also { it.state = ComponentFactoryState.Loaded })
     }
 
-    override fun <T : Any> define(componentFactory: ComponentFactory<T>) =
-        lock.writeLock().withLock {
-            if (components.containsStrict(componentFactory.type)) throw ComponentAlreadyExistsException("Class ${componentFactory.type} already has a direct ComponentFactory")
-            if (componentFactory.name in components) throw ComponentAlreadyExistsException("Name ${componentFactory.name} already exists for Class ${componentFactory.type}")
-            componentFactory.state = ComponentFactoryState.Loaded
-            components.put(componentFactory)
-        }
+    override fun <T : Any> define(componentFactory: ComponentFactory<T>) = lock.writeLock().withLock {
+        if (components.containsStrict(componentFactory.type)) throw ComponentAlreadyExistsException("Class ${componentFactory.type} already has a direct ComponentFactory")
+        if (componentFactory.name in components) throw ComponentAlreadyExistsException("Name ${componentFactory.name} already exists for Class ${componentFactory.type}")
+        componentFactory.state = ComponentFactoryState.Loaded
+        components.put(componentFactory)
+    }
 
     override fun link() = lock.writeLock().withLock { components.filter { it.state == ComponentFactoryState.Loaded }.onEach(ComponentFactory<*>::link).onEach(this::checkForCircularDependency).onEach(ComponentFactory<*>::initialize) }
 

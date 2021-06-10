@@ -18,16 +18,15 @@ class DefaultComponents<T>(
     private var primary: ComponentFactory<out T>? = null
 ) : Components<T>, Iterable<ComponentFactory<out T>> by byName.values {
     @Suppress("UNCHECKED_CAST")
-    override fun get(componentQualifier: ComponentQualifier): Components<*> =
-        when (componentQualifier) {
-            is NameComponentQualifier -> DefaultComponents<Any>().apply {
-                val gotByName = get(componentQualifier.name)
-                primary = gotByName
-                gotByName?.let(this::put)
-            }
-            is TypeComponentQualifier -> get(type = componentQualifier.type as? Class<out T> ?: error("Type ${componentQualifier.type} is not a subtype of this components collection"))
-            else -> error("ComponentQualifier ${componentQualifier.javaClass.name} not implemented")
+    override fun get(componentQualifier: ComponentQualifier): Components<*> = when (componentQualifier) {
+        is NameComponentQualifier -> DefaultComponents<Any>().apply {
+            val gotByName = get(componentQualifier.name)
+            primary = gotByName
+            gotByName?.let(this::put)
         }
+        is TypeComponentQualifier -> get(type = componentQualifier.type as? Class<out T> ?: error("Type ${componentQualifier.type} is not a subtype of this components collection"))
+        else -> error("ComponentQualifier ${componentQualifier.javaClass.name} not implemented")
+    }
 
     override fun get(name: String) = lock.readLock().withLock { byName[name] }?.takeIf { it.state == ComponentFactoryState.Ready }
 
