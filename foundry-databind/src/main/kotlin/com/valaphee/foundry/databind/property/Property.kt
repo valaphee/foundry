@@ -124,7 +124,7 @@ open class DefaultProperty<T : Any>(
                 var changed = false
                 var eventToSend = Maybe.empty<ObservableValueChanged<T>>()
                 atom.transform {
-                    if (validate(newValue).not()) throw ValueValidationFailedException(newValue, "The given value '$newValue' is invalid")
+                    if (validate(newValue).not()) throw ValueValidationFailedException(newValue, "The given value $newValue is invalid")
                     if (oldValue != newValue) {
                         changed = true
                         eventToSend = Maybe.of(ObservableValueChanged(oldValue, newValue, this, this, listOf(event) + event.trace))

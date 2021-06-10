@@ -3,6 +3,7 @@
  * All rights reserved.
  */
 
+@file:JvmName("Math")
 @file:Suppress("NOTHING_TO_INLINE")
 
 package com.valaphee.foundry.math

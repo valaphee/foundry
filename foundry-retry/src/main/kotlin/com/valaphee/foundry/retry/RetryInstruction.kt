@@ -3,6 +3,8 @@
  * All rights reserved.
  */
 
+@file:JvmName("RetryInstructions")
+
 package com.valaphee.foundry.retry
 
 /**

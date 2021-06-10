@@ -3,6 +3,7 @@
  * All rights reserved.
  */
 
+@file:JvmName("Delay")
 package com.valaphee.foundry.retry.policy
 
 import com.valaphee.foundry.retry.ContinueRetrying

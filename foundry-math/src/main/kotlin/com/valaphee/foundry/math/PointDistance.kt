@@ -3,6 +3,8 @@
  * All rights reserved.
  */
 
+@file:JvmName("PointDistance")
+
 package com.valaphee.foundry.math
 
 import com.valaphee.foundry.math.collision.Ray

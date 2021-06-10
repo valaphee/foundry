@@ -3,6 +3,7 @@
  * All rights reserved.
  */
 
+@file:JvmName("Backoff")
 @file:Suppress("NOTHING_TO_INLINE")
 
 package com.valaphee.foundry.retry.policy
