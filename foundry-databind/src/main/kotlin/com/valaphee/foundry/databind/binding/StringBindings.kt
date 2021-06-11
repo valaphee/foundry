@@ -3,6 +3,8 @@
  * All rights reserved.
  */
 
+@file:JvmName("StringBindings")
+
 package com.valaphee.foundry.databind.binding
 
 import com.valaphee.foundry.databind.converter.toConverter

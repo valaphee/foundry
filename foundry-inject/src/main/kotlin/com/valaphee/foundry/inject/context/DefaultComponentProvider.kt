@@ -39,13 +39,10 @@ internal class SimpleParameterFactory(
 internal class ListParameterFactory(
     private val componentQualifier: ComponentQualifier
 ) : ParameterFactory {
-    override fun DefaultComponents<*>.factories(): Iterable<ComponentFactory<*>> = if (componentQualifier is TypeComponentQualifier && componentQualifier.genericType != null) {
-        getLinked(TypeComponentQualifier(componentQualifier.genericType)).toList()
-    } else if (componentQualifier is NameComponentQualifier) {
-        getLinked(componentQualifier).toList()
-    } else {
-        emptyList()
-    }
+    override fun DefaultComponents<*>.factories(): Iterable<ComponentFactory<*>> =
+        if (componentQualifier is TypeComponentQualifier && componentQualifier.genericType != null) getLinked(TypeComponentQualifier(componentQualifier.genericType)).toList()
+        else if (componentQualifier is NameComponentQualifier) getLinked(componentQualifier).toList()
+        else emptyList()
 
     override fun DefaultComponents<*>.instantiateParameter() = factories().flatMap(ComponentFactory<*>::toList)
 }

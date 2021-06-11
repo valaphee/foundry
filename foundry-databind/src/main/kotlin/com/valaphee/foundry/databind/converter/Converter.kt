@@ -11,4 +11,3 @@ package com.valaphee.foundry.databind.converter
 interface Converter<S, T> {
     operator fun invoke(source: S): T
 }
-
