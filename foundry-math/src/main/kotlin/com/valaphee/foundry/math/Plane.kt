@@ -10,9 +10,14 @@ import com.valaphee.foundry.math.collision.Ray
 /**
  * @author Kevin Ludwig
  */
-class Plane {
+class Plane() {
     val point = MutableFloat3()
     val normal = MutableFloat3(Float3.YAxis)
+
+    constructor(point: Float3, normal: Float3) : this() {
+        this.point.set(point)
+        this.normal.set(normal)
+    }
 
     fun intersectionPoint(ray: Ray, result: MutableFloat3): Boolean {
         val denominator = normal.dot(ray.direction)

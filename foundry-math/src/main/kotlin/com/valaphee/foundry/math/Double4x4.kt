@@ -119,7 +119,7 @@ open class Double4x4 {
         val sin = sin(rad)
         val cos = cos(rad)
 
-        if (axisXVar == 1.0 && axisYVar == 0.0 && axisZVar == 0.0) {
+        if (axisXVar > 0.0 && axisYVar == 0.0 && axisZVar == 0.0) {
             matrix[5] = cos
             matrix[10] = cos
             matrix[6] = sin
@@ -129,7 +129,7 @@ open class Double4x4 {
             matrix[4] = 0.0
             matrix[8] = 0.0
             matrix[0] = 1.0
-        } else if (axisXVar == 0.0 && axisYVar == 1.0 && axisZVar == 0.0) {
+        } else if (axisXVar == 0.0 && axisYVar > 0.0 && axisZVar == 0.0) {
             matrix[0] = cos
             matrix[10] = cos
             matrix[8] = sin
@@ -139,7 +139,7 @@ open class Double4x4 {
             matrix[6] = 0.0
             matrix[9] = 0.0
             matrix[5] = 1.0
-        } else if (axisXVar == 0.0 && axisYVar == 0.0 && axisZVar == 1.0) {
+        } else if (axisXVar == 0.0 && axisYVar == 0.0 && axisZVar > 0.0) {
             matrix[0] = cos
             matrix[5] = cos
             matrix[1] = sin
@@ -150,13 +150,10 @@ open class Double4x4 {
             matrix[9] = 0.0
             matrix[10] = 1.0
         } else {
-            val length = sqrt(axisXVar * axisXVar + axisYVar * axisYVar + axisZVar * axisZVar)
-            if (!equals(length, 1.0)) {
-                val reciprocalLength = 1.0 / length
-                axisXVar *= reciprocalLength
-                axisYVar *= reciprocalLength
-                axisZVar *= reciprocalLength
-            }
+            val reciprocalLength = 1.0 / sqrt(axisXVar * axisXVar + axisYVar * axisYVar + axisZVar * axisZVar)
+            axisXVar *= reciprocalLength
+            axisYVar *= reciprocalLength
+            axisZVar *= reciprocalLength
 
             val vers = 1.0 - cos
             val xy = axisXVar * axisYVar
@@ -487,7 +484,7 @@ open class Double4x4 {
     }
 
     fun translate(x: Double, y: Double, z: Double) = apply {
-        for (i in 0..3) matrix[12] += matrix[i] * x + matrix[4 + i] * y + matrix[8 + i] * z
+        for (i in 0..3) matrix[12 + i] += matrix[i] * x + matrix[4 + i] * y + matrix[8 + i] * z
     }
 
     fun translate(value: Double3) = translate(value.x, value.y, value.z)
@@ -616,6 +613,7 @@ class Double4x4Stack(
         val offset = stackIndex * 16
         for (i in 0..15) stack[offset + i] = matrix[i]
         stackIndex++
+        setIdentity()
     }
 
     fun pop() = apply {

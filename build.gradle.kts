@@ -67,7 +67,7 @@ subprojects {
             create<MavenPublication>("maven") {
                 pom.apply {
                     name.set(project.name)
-                    description.set("Where software gets made")
+                    description.set("Toolkit")
                     url.set("https://github.com/Valaphee/foundry")
                     scm {
                         connection.set("https://github.com/Valaphee/foundry.git")

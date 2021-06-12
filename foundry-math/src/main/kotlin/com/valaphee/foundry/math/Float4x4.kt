@@ -119,7 +119,7 @@ open class Float4x4 {
         val sin = sin(rad)
         val cos = cos(rad)
 
-        if (axisXVar == 1.0f && axisYVar == 0.0f && axisZVar == 0.0f) {
+        if (axisXVar > 0.0f && axisYVar == 0.0f && axisZVar == 0.0f) {
             matrix[5] = cos
             matrix[10] = cos
             matrix[6] = sin
@@ -129,7 +129,7 @@ open class Float4x4 {
             matrix[4] = 0.0f
             matrix[8] = 0.0f
             matrix[0] = 1.0f
-        } else if (axisXVar == 0.0f && axisYVar == 1.0f && axisZVar == 0.0f) {
+        } else if (axisXVar == 0.0f && axisYVar > 0.0f && axisZVar == 0.0f) {
             matrix[0] = cos
             matrix[10] = cos
             matrix[8] = sin
@@ -139,7 +139,7 @@ open class Float4x4 {
             matrix[6] = 0.0f
             matrix[9] = 0.0f
             matrix[5] = 1.0f
-        } else if (axisXVar == 0.0f && axisYVar == 0.0f && axisZVar == 1.0f) {
+        } else if (axisXVar == 0.0f && axisYVar == 0.0f && axisZVar > 0.0f) {
             matrix[0] = cos
             matrix[5] = cos
             matrix[1] = sin
@@ -150,13 +150,10 @@ open class Float4x4 {
             matrix[9] = 0.0f
             matrix[10] = 1.0f
         } else {
-            val length = sqrt(axisXVar * axisXVar + axisYVar * axisYVar + axisZVar * axisZVar)
-            if (!equals(length, 1.0f)) {
-                val reciprocalLength = 1.0f / length
-                axisXVar *= reciprocalLength
-                axisYVar *= reciprocalLength
-                axisZVar *= reciprocalLength
-            }
+            val reciprocalLength = 1.0f / sqrt(axisXVar * axisXVar + axisYVar * axisYVar + axisZVar * axisZVar)
+            axisXVar *= reciprocalLength
+            axisYVar *= reciprocalLength
+            axisZVar *= reciprocalLength
 
             val vers = 1.0f - cos
             val xy = axisXVar * axisYVar
@@ -579,6 +576,7 @@ class Float4x4Stack(
         val offset = stackIndex * 16
         for (i in 0..15) stack[offset + i] = matrix[i]
         stackIndex++
+        setIdentity()
     }
 
     fun pop() = apply {
