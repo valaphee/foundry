@@ -9,22 +9,22 @@ import com.valaphee.foundry.databind.value.ObservableValue
 
 fun ObservableValue<Double>.bindNegate() = ComputedBinding(this) { -it }
 
-infix fun ObservableValue<Double>.bindPlusWith(that: ObservableValue<Number>) = ComputedDualBinding(this, that) { a, b -> a + b.toDouble() }
+infix fun ObservableValue<Double>.bindPlusWith(b: ObservableValue<Number>) = ComputedDualBinding(this, b) { a, b -> a + b.toDouble() }
 
-infix fun ObservableValue<Double>.bindMinusWith(that: ObservableValue<Number>) = ComputedDualBinding(this, that) { a, b -> a - b.toDouble() }
+infix fun ObservableValue<Double>.bindMinusWith(b: ObservableValue<Number>) = ComputedDualBinding(this, b) { a, b -> a - b.toDouble() }
 
-infix fun ObservableValue<Double>.bindTimesWith(that: ObservableValue<Number>) = ComputedDualBinding(this, that) { a, b -> a * b.toDouble() }
+infix fun ObservableValue<Double>.bindTimesWith(b: ObservableValue<Number>) = ComputedDualBinding(this, b) { a, b -> a * b.toDouble() }
 
-infix fun ObservableValue<Double>.bindDivWith(that: ObservableValue<Number>) = ComputedDualBinding(this, that) { a, b -> a / b.toDouble() }
+infix fun ObservableValue<Double>.bindDivWith(b: ObservableValue<Number>) = ComputedDualBinding(this, b) { a, b -> a / b.toDouble() }
 
-infix fun ObservableValue<Double>.bindEqualsWith(that: ObservableValue<Number>) = ComputedDualBinding(this, that) { a, b -> a == b.toDouble() }
+infix fun ObservableValue<Double>.bindEqualsWith(b: ObservableValue<Number>) = ComputedDualBinding(this, b) { a, b -> a == b.toDouble() }
 
-infix fun ObservableValue<Double>.bindGreaterThanWith(that: ObservableValue<Number>) = ComputedDualBinding(this, that) { a, b -> a > b.toDouble() }
+infix fun ObservableValue<Double>.bindGreaterThanWith(b: ObservableValue<Number>) = ComputedDualBinding(this, b) { a, b -> a > b.toDouble() }
 
-infix fun ObservableValue<Double>.bindLessThanWith(that: ObservableValue<Number>) = ComputedDualBinding(this, that) { a, b -> a < b.toDouble() }
+infix fun ObservableValue<Double>.bindLessThanWith(b: ObservableValue<Number>) = ComputedDualBinding(this, b) { a, b -> a < b.toDouble() }
 
-infix fun ObservableValue<Double>.bindGreaterThanOrEqualToWith(that: ObservableValue<Number>) = ComputedDualBinding(this, that) { a, b -> a >= b.toDouble() }
+infix fun ObservableValue<Double>.bindGreaterThanOrEqualToWith(b: ObservableValue<Number>) = ComputedDualBinding(this, b) { a, b -> a >= b.toDouble() }
 
-infix fun ObservableValue<Double>.bindLessThanOrEqualToWith(that: ObservableValue<Number>) = ComputedDualBinding(this, that) { a, b -> a <= b.toDouble() }
+infix fun ObservableValue<Double>.bindLessThanOrEqualToWith(b: ObservableValue<Number>) = ComputedDualBinding(this, b) { a, b -> a <= b.toDouble() }
 
 fun ObservableValue<Double>.bindToString() = ComputedBinding(this) { it.toString() }

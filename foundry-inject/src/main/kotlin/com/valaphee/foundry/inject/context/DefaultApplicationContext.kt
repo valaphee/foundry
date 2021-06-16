@@ -27,15 +27,15 @@ class DefaultApplicationContext(
     override fun unregisterScope(scope: String): Unit = lock.writeLock().withLock { factoryProducerRegistry.remove(scope) }
 
     override fun <T : Any> define(type: Class<T>, name: String?, scope: String, constructor: ComponentConstructor<T>?) = lock.writeLock().withLock {
-        if (components.containsStrict(type)) throw ComponentAlreadyExistsException("Class $type already has a direct ComponentFactory")
-        val factoryProducer = factoryProducerRegistry[scope] ?: throw ComponentLoadException("No ComponentFactoryProducer found for Scope $scope")
-        if (name != null && name in components) throw ComponentAlreadyExistsException("Name $name already exists for Class $type")
+        if (components.containsStrict(type)) throw ComponentAlreadyExistsException("Class $type already has a direct component factory")
+        val factoryProducer = factoryProducerRegistry[scope] ?: throw ComponentLoadException("No component factory producer found for scope $scope")
+        if (name != null && name in components) throw ComponentAlreadyExistsException("Name $name already exists for class $type")
         components.put(factoryProducer.produceComponentFactory(type, name ?: components.computeName(type), constructor).also { it.state = ComponentFactoryState.Loaded })
     }
 
     override fun <T : Any> define(componentFactory: ComponentFactory<T>) = lock.writeLock().withLock {
-        if (components.containsStrict(componentFactory.type)) throw ComponentAlreadyExistsException("Class ${componentFactory.type} already has a direct ComponentFactory")
-        if (componentFactory.name in components) throw ComponentAlreadyExistsException("Name ${componentFactory.name} already exists for Class ${componentFactory.type}")
+        if (components.containsStrict(componentFactory.type)) throw ComponentAlreadyExistsException("Class ${componentFactory.type} already has a direct component factory")
+        if (componentFactory.name in components) throw ComponentAlreadyExistsException("Name ${componentFactory.name} already exists for class ${componentFactory.type}")
         componentFactory.state = ComponentFactoryState.Loaded
         components.put(componentFactory)
     }

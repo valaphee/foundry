@@ -138,7 +138,7 @@ open class DefaultProperty<T : Any>(
                 changed
             }
         } catch (ex: CircularBindingException) {
-            log.warn("Bound Property was not updated due to circular dependency", ex)
+            log.warn("Bound property was not updated due to circular dependency", ex)
             false
         }
     }

@@ -34,25 +34,22 @@ class ListBinding<S : Any, T : Any>(
     init {
         subscriptions.add(source.onChange { event ->
             if (event.trace.any { it.emitter == this }) throw CircularBindingException("Circular binding detected with trace ${event.trace.joinToString()} for property $this")
-
             val type = event.type
             val oldValue = target.value
             val maybeNewValue = target.transformValue {
                 when (type) {
                     is ScalarChange -> event.newValue.map { convert(it) }
-                    is ListChange -> {
-                        when (type) {
-                            is ListAdd<*> -> oldValue.add(convert(type.element as S))
-                            is ListAddAt<*> -> oldValue.add(type.index, convert(type.element as S))
-                            is ListRemove<*> -> oldValue.remove(convert(type.element as S))
-                            is ListRemoveAt -> oldValue.removeAt(type.index)
-                            is ListSet<*> -> oldValue.set(type.index, convert(type.element as S))
-                            is ListAddAll<*> -> oldValue.addAll(type.elements.map { convert(it as S) })
-                            is ListAddAllAt<*> -> oldValue.addAll(type.index, type.elements.map { convert(it as S) })
-                            is ListRemoveAll<*> -> oldValue.removeAll(type.elements.map { convert(it as S) })
-                            is ListRemoveAllWhen<*> -> oldValue.removeAll { (type.predicate as (T) -> Boolean)(it) }
-                            ListClear -> oldValue.clear()
-                        }
+                    is ListChange -> when (type) {
+                        is ListAdd<*> -> oldValue.add(convert(type.element as S))
+                        is ListAddAt<*> -> oldValue.add(type.index, convert(type.element as S))
+                        is ListRemove<*> -> oldValue.remove(convert(type.element as S))
+                        is ListRemoveAt -> oldValue.removeAt(type.index)
+                        is ListSet<*> -> oldValue.set(type.index, convert(type.element as S))
+                        is ListAddAll<*> -> oldValue.addAll(type.elements.map { convert(it as S) })
+                        is ListAddAllAt<*> -> oldValue.addAll(type.index, type.elements.map { convert(it as S) })
+                        is ListRemoveAll<*> -> oldValue.removeAll(type.elements.map { convert(it as S) })
+                        is ListRemoveAllWhen<*> -> oldValue.removeAll { (type.predicate as (T) -> Boolean)(it) }
+                        ListClear -> oldValue.clear()
                     }
                 }
             }

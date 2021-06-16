@@ -19,10 +19,10 @@ fun ObservableValue<String>.bindIsBlank(): Binding<Boolean> {
     return UnidirectionalBinding(this, convert(this.value).toInternalProperty(), convert)
 }
 
-infix fun ObservableValue<String>.bindPlusWith(that: ObservableValue<String>) = ComputedDualBinding(this, that) { a, b -> a + b }
+infix fun ObservableValue<String>.bindPlusWith(b: ObservableValue<String>) = ComputedDualBinding(this, b) { a, b -> a + b }
 
-infix fun ObservableValue<String>.bindEqualsWith(that: ObservableValue<String>) = ComputedDualBinding(this, that) { a, b -> a == b }
+infix fun ObservableValue<String>.bindEqualsWith(b: ObservableValue<String>) = ComputedDualBinding(this, b) { a, b -> a == b }
 
-infix fun ObservableValue<String>.bindEqualsIgnoreCase(that: ObservableValue<String>) = ComputedDualBinding(this, that) { a, b -> a.equals(b, ignoreCase = true) }
+infix fun ObservableValue<String>.bindEqualsIgnoreCase(b: ObservableValue<String>) = ComputedDualBinding(this, b) { a, b -> a.equals(b, ignoreCase = true) }
 
 fun ObservableValue<String>.length() = ComputedBinding(this) { it.length }

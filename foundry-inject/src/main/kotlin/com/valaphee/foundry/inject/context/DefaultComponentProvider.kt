@@ -33,7 +33,7 @@ internal class SimpleParameterFactory(
 ) : ParameterFactory {
     override fun DefaultComponents<*>.factories() = getLinked(componentQualifier)()?.let { listOf(it) } ?: emptyList()
 
-    override fun DefaultComponents<*>.instantiateParameter() = getLinked(componentQualifier)()?.invoke() ?: throw ComponentLinkNotFoundException("Component definition for Class $componentQualifier not found")
+    override fun DefaultComponents<*>.instantiateParameter() = getLinked(componentQualifier)()?.invoke() ?: throw ComponentLinkNotFoundException("Component definition for class $componentQualifier not found")
 }
 
 internal class ListParameterFactory(

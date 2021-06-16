@@ -28,7 +28,6 @@ class ComputedDualBinding<out S0 : Any, out S1 : Any, T : Any>(
     override val value: T
         get() {
             check(disposed.not()) { "Can't calculate the value of a binding which is disposed" }
-
             return target.value
         }
 
