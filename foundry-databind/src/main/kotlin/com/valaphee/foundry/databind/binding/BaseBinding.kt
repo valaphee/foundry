@@ -25,7 +25,8 @@ abstract class BaseBinding<S : Any, T : Any>(
 ) : Binding<T> {
     override val value: T
         get() {
-            require(disposed.not()) { "Can't calculate the value of a binding which is disposed" }
+            check(disposed.not()) { "Can't calculate the value of a binding which is disposed" }
+
             return target.value
         }
 

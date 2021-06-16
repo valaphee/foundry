@@ -3,8 +3,6 @@
  * All rights reserved.
  */
 
-@file:JvmName("Bindings")
-
 package com.valaphee.foundry.databind.binding
 
 import com.valaphee.foundry.databind.value.ObservableValue

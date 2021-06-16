@@ -3,8 +3,6 @@
  * All rights reserved.
  */
 
-@file:JvmName("Partition")
-
 package com.valaphee.foundry.math
 
 import kotlin.math.exp

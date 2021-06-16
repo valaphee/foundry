@@ -27,6 +27,7 @@ class Maybe<T> {
 
     fun get(): T {
         if (value == null) throw NoSuchElementException("No value present")
+
         return value
     }
 

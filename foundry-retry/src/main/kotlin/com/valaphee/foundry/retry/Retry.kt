@@ -3,8 +3,6 @@
  * All rights reserved.
  */
 
-@file:JvmName("Retry")
-
 package com.valaphee.foundry.retry
 
 import com.valaphee.foundry.retry.context.RetryStatus

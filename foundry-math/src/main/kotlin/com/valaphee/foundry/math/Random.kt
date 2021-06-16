@@ -3,8 +3,6 @@
  * All rights reserved.
  */
 
-@file:JvmName("Random")
-
 package com.valaphee.foundry.math
 
 import kotlin.math.nextDown

@@ -3,7 +3,6 @@
  * All rights reserved.
  */
 
-@file:JvmName("Limit")
 package com.valaphee.foundry.retry.policy
 
 import com.valaphee.foundry.retry.ContinueRetrying

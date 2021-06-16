@@ -34,7 +34,7 @@ class SubmitResultValue<out T : Any>(
  * @author Kevin Ludwig
  */
 class SubmitResultError(
-    val exception: Exception
+    val error: Exception
 ) : SubmitResult<Nothing>(false) {
-    override fun component1() = throw exception
+    override fun component1() = throw error
 }

@@ -3,8 +3,6 @@
  * All rights reserved.
  */
 
-@file:JvmName("StringBindings")
-
 package com.valaphee.foundry.databind.binding
 
 import com.valaphee.foundry.databind.converter.toConverter
@@ -21,10 +19,10 @@ fun ObservableValue<String>.bindIsBlank(): Binding<Boolean> {
     return UnidirectionalBinding(this, convert(this.value).toInternalProperty(), convert)
 }
 
-infix fun ObservableValue<String>.bindPlusWith(that: ObservableValue<String>) = ComputedDualBinding(this, that) { thisValue, thatValue -> thisValue + thatValue }
+infix fun ObservableValue<String>.bindPlusWith(that: ObservableValue<String>) = ComputedDualBinding(this, that) { a, b -> a + b }
 
-infix fun ObservableValue<String>.bindEqualsWith(that: ObservableValue<String>) = ComputedDualBinding(this, that) { thisValue, thatValue -> thisValue == thatValue }
+infix fun ObservableValue<String>.bindEqualsWith(that: ObservableValue<String>) = ComputedDualBinding(this, that) { a, b -> a == b }
 
-infix fun ObservableValue<String>.bindEqualsIgnoreCase(that: ObservableValue<String>) = ComputedDualBinding(this, that) { thisValue, thatValue -> thisValue.equals(thatValue, ignoreCase = true) }
+infix fun ObservableValue<String>.bindEqualsIgnoreCase(that: ObservableValue<String>) = ComputedDualBinding(this, that) { a, b -> a.equals(b, ignoreCase = true) }
 
 fun ObservableValue<String>.length() = ComputedBinding(this) { it.length }

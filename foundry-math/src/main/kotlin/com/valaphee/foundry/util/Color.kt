@@ -17,10 +17,14 @@ open class Color(
     b: Float,
     a: Float = 1.0f
 ) : Float4(r, g, b, a) {
+    constructor(other: Color) : this(other.r, other.g, other.b, other.a)
+
     open val r get() = this[0]
     open val g get() = this[1]
     open val b get() = this[2]
     open val a get() = this[3]
+
+    val brightness get() = 0.299f * r + 0.587f * g + 0.114f * b
 
     fun mix(value: Color, weight: Float) = mix(value, weight, MutableColor())
 

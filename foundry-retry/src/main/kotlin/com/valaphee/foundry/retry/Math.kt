@@ -3,8 +3,6 @@
  * All rights reserved.
  */
 
-@file:JvmName("Math")
-
 package com.valaphee.foundry.retry
 
 infix fun Long.smul(other: Long) = if (this == 0L || other <= Long.MAX_VALUE / this) this * other else Long.MAX_VALUE

@@ -33,14 +33,14 @@ class ColorGradient(
         var colorIndex = 0
         var colorA = colors[colorIndex++]
         var colorB = colors[colorIndex++]
-        repeat(steps) {
-            var between = it / (steps - 1.0f) * (endColor - beginColor) + beginColor
+        for (i in 0 until steps) {
+            var between = i / (steps - 1.0f) * (endColor - beginColor) + beginColor
             while (between > colorB.first) {
                 colorA = colorB
                 colorB = colors[min(colorIndex++, colors.size)]
             }
             between = 1.0f - (between - colorA.first) / (colorB.first - colorA.first)
-            gradient[it].set(colorA.second).scale(between).add(colorB.second, 1.0f - between)
+            gradient[i].set(colorA.second).scale(between).add(colorB.second, 1.0f - between)
         }
     }
 

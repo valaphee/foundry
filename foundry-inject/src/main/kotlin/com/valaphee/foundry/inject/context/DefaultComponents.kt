@@ -99,6 +99,4 @@ class DefaultComponents<T>(
         primary = this@component
         if (this@component != null) put(this@component)
     }
-
-    override fun toString() = "Components {primary: $primary}, {values: ${byName.values}}"
 }

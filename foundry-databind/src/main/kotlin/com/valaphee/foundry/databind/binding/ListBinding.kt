@@ -3,8 +3,6 @@
  * All rights reserved.
  */
 
-@file:JvmName("ListBindings")
-
 package com.valaphee.foundry.databind.binding
 
 import com.valaphee.foundry.databind.ListAdd
@@ -36,6 +34,7 @@ class ListBinding<S : Any, T : Any>(
     init {
         subscriptions.add(source.onChange { event ->
             if (event.trace.any { it.emitter == this }) throw CircularBindingException("Circular binding detected with trace ${event.trace.joinToString()} for property $this")
+
             val type = event.type
             val oldValue = target.value
             val maybeNewValue = target.transformValue {

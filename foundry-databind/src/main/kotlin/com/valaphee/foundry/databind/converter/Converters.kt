@@ -3,8 +3,6 @@
  * All rights reserved.
  */
 
-@file:JvmName("Converters")
-
 package com.valaphee.foundry.databind.converter
 
 fun <S : Any, T : Any> ((S) -> T).toConverter() = object : Converter<S, T> {

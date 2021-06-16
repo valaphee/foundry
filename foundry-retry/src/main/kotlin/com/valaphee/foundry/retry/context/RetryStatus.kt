@@ -24,18 +24,21 @@ class RetryStatus(
     var attempt = attempt
         private set(value) {
             require(value >= 0) { "attempt must be non-negative: $attempt" }
+
             field = value
         }
 
     var previousDelay = previousDelay
         internal set(value) {
             require(value >= 0) { "previousDelay must be non-negative: $previousDelay" }
+
             field = value
         }
 
     var cumulativeDelay = cumulativeDelay
         private set(value) {
             require(value >= 0) { "cumulativeDelay must be non-negative: $cumulativeDelay" }
+
             field = value
         }
 
@@ -45,6 +48,7 @@ class RetryStatus(
 
     internal fun incrementCumulativeDelay(delay: Long) {
         require(delay > 0) { "delay must be positive: $delay" }
+
         cumulativeDelay = cumulativeDelay sadd delay
     }
 
