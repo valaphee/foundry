@@ -97,7 +97,7 @@ open class MutableInt2(
         set(value) {
             _vector[1] = value
         }
-    val array get() = _vector
+    val vector get() = _vector
 
     constructor() : this(0)
 

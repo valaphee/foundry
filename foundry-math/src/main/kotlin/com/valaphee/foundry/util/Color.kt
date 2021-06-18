@@ -50,6 +50,8 @@ open class Color(
 
     fun toSrgb(result: MutableColor) = gamma(1.0f / 2.2f, result)
 
+    override fun toString() = if (a == 1.0f) String.format("#%02x%02x%02x", r * 255.0f, g * 255.0f, b * 255.0f) else String.format("#%02x%02x%02x%02x", r * 255.0f, g * 255.0f, b * 255.0f, a * 255.0f)
+
     companion object {
         val Black = Color(0.00f, 0.00f, 0.00f, 1.00f)
         val DarkGray = Color(0.25f, 0.25f, 0.25f, 1.00f)

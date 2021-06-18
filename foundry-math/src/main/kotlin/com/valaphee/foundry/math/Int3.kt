@@ -112,7 +112,7 @@ open class MutableInt3(
         set(value) {
             this[2] = value
         }
-    val array get() = _vector
+    val vector get() = _vector
 
     constructor() : this(0, 0, 0)
 
