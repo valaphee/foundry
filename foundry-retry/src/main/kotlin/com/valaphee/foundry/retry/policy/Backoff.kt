@@ -55,7 +55,7 @@ fun decorrelatedJitterBackoff(base: Long, maximum: Long): RetryPolicy<*> {
     require(base > 0) { "base must be positive: $base" }
     require(maximum > 0) { "maximum must be positive: $maximum" }
 
-    return { retryAfter(min(maximum, coroutineContext.retryRandom.random.nextLong(base, max(base, coroutineContext.retryStatus.previousDelay smul 3) sadd 1))) }
+    return { retryAfter(min(maximum, coroutineContext.retryRandom.random.nextLong(base, max(base, coroutineContext.retryStatus.prevDelay smul 3) sadd 1))) }
 }
 
 inline fun decorrelatedJitterBackoff(range: LongRange) = decorrelatedJitterBackoff(range.first, range.last)

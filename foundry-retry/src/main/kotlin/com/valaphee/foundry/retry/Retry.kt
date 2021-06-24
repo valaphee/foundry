@@ -41,13 +41,13 @@ suspend fun <T> retry(policy: RetryPolicy<Throwable> = defaultPolicy, block: Pro
                         break
                     }
                     ContinueRetrying -> {
-                        status.previousDelay = 0
+                        status.prevDelay = 0
                         continue
                     }
                     else -> {
                         val delay = instruction.delay
                         delay(delay)
-                        status.previousDelay = delay
+                        status.prevDelay = delay
                         status.incrementCumulativeDelay(delay)
                     }
                 }

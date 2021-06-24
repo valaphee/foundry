@@ -102,6 +102,45 @@ open class Double4x4 {
         matrix[15] = 1.0
     }
 
+    fun setRotate(eulerX: Double, eulerY: Double, eulerZ: Double): Double4x4 {
+        val a = eulerX.toRad()
+        val b = eulerY.toRad()
+        val c = eulerZ.toRad()
+
+        val ci = cos(a)
+        val cj = cos(b)
+        val ch = cos(c)
+        val si = sin(a)
+        val sj = sin(b)
+        val sh = sin(c)
+        val cc = ci * ch
+        val cs = ci * sh
+        val sc = si * ch
+        val ss = si * sh
+
+        matrix[0] = cj * ch
+        matrix[4] = sj * sc - cs
+        matrix[8] = sj * cc + ss
+        matrix[12] = 0.0
+
+        matrix[1] = cj * sh
+        matrix[5] = sj * ss + cc
+        matrix[9] = sj * cs - sc
+        matrix[13] = 0.0
+
+        matrix[2] = -sj
+        matrix[6] = cj * si
+        matrix[10] = cj * ci
+        matrix[14] = 0.0
+
+        matrix[3] = 0.0
+        matrix[7] = 0.0
+        matrix[11] = 0.0
+        matrix[15] = 1.0
+
+        return this
+    }
+
     fun setRotate(value: Double, axisX: Double, axisY: Double, axisZ: Double) = apply {
         var axisXVar = axisX
         var axisYVar = axisY
@@ -174,7 +213,7 @@ open class Double4x4 {
         }
     }
 
-    fun setRotation(quaternion: Double4) = apply {
+    fun setRotate(quaternion: Double4) = apply {
         val w = quaternion.w
         val x = quaternion.x
         val y = quaternion.y
@@ -366,7 +405,7 @@ open class Double4x4 {
         return result
     }
 
-    fun transpose() = set(transpose(Double4x4()))
+    fun transpose() = set(transpose(_tmp1.get()))
 
     fun transpose(result: Double4x4): Double4x4 {
         for (i in 0..3) {
@@ -380,8 +419,8 @@ open class Double4x4 {
     }
 
     fun invert(epsilon: Double = 0.0): Boolean {
-        val result = Double4x4()
-        return invert(result, epsilon).also { if (it) set(result) }
+        val _tmp = _tmp1.get()
+        return invert(_tmp, epsilon).also { if (it) set(_tmp) }
     }
 
     fun invert(result: Double4x4, epsilon: Double = 0.0): Boolean {
@@ -469,9 +508,9 @@ open class Double4x4 {
     }
 
     fun mul(value: Double4x4) = apply {
-        val result = Double4x4()
-        mul(value, result)
-        set(result)
+        val _tmp = _tmp1.get()
+        mul(value, _tmp)
+        set(_tmp)
     }
 
     fun mul(value: Double4x4, result: Double4x4): Double4x4 {
@@ -495,13 +534,17 @@ open class Double4x4 {
         return result
     }
 
-    fun rotate(value: Double, axisX: Double, axisY: Double, axisZ: Double) = set(mul(Double4x4().setRotate(value, axisX, axisY, axisZ), Double4x4()))
+    fun rotate(value: Double, axisX: Double, axisY: Double, axisZ: Double) = set(mul(_tmp1.get().setRotate(value, axisX, axisY, axisZ), _tmp2.get()))
 
     fun rotate(value: Double, axis: Double3) = rotate(value, axis.x, axis.y, axis.z)
 
-    fun rotate(value: Double, axisX: Double, axisY: Double, axisZ: Double, result: Double4x4) = mul(Double4x4().setRotate(value, axisX, axisY, axisZ), result)
+    fun rotate(value: Double, axisX: Double, axisY: Double, axisZ: Double, result: Double4x4) = set(mul(_tmp1.get().setRotate(value, axisX, axisY, axisZ), result))
 
     fun rotate(value: Double, axis: Double3, result: Double4x4) = rotate(value, axis.x, axis.y, axis.z, result)
+
+    fun rotate(eulerX: Double, eulerY: Double, eulerZ: Double) = set(mul(_tmp1.get().setRotate(eulerX, eulerY, eulerZ), _tmp2.get()))
+
+    fun rotate(eulerX: Double, eulerY: Double, eulerZ: Double, result: Double4x4) = set(mul(_tmp1.get().setRotate(eulerX, eulerY, eulerZ), result))
 
     fun scale(value: Double) = scale(value, value, value)
 
@@ -593,6 +636,11 @@ open class Double4x4 {
         matrix[8], matrix[9], matrix[10], matrix[11],
         matrix[12], matrix[13], matrix[14], matrix[15],
     )
+
+    companion object {
+        val _tmp1 = ThreadLocal.withInitial { Double4x4() }
+        val _tmp2 = ThreadLocal.withInitial { Double4x4() }
+    }
 }
 
 /**

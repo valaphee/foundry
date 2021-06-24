@@ -50,7 +50,7 @@ open class Color(
 
     fun toSrgb(result: MutableColor) = gamma(1.0f / 2.2f, result)
 
-    override fun toString() = if (a == 1.0f) String.format("#%02x%02x%02x", r * 255.0f, g * 255.0f, b * 255.0f) else String.format("#%02x%02x%02x%02x", r * 255.0f, g * 255.0f, b * 255.0f, a * 255.0f)
+    override fun toString() = if (a == 1.0f) String.format("#%02x%02x%02x", (r * 255.0f).toInt(), (g * 255.0f).toInt(), (b * 255.0f).toInt()) else String.format("#%02x%02x%02x%02x", (r * 255.0f).toInt(), (g * 255.0f).toInt(), (b * 255.0f).toInt(), (a * 255.0f).toInt())
 
     companion object {
         val Black = Color(0.00f, 0.00f, 0.00f, 1.00f)

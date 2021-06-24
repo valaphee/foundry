@@ -35,6 +35,14 @@ inline fun Float.isZero(epsilon: Float = FloatEpsilon) = abs(this) <= epsilon
 
 inline fun Double.isZero(epsilon: Double = DoubleEpsilon) = abs(this) <= epsilon
 
+fun fastFloor(value: Float) = if (value >= 0) value.toInt() else value.toInt() - 1
+
+fun fastFloor(value: Double) = if (value >= 0) value.toInt() else value.toInt() - 1
+
+fun fastRound(value: Float) = if (value >= 0) (value + 0.5f).toInt() else (value - 0.5f).toInt()
+
+fun fastRound(value: Double) = if (value >= 0) (value + 0.5).toInt() else (value - 0.5).toInt()
+
 inline fun Int.clamp(minimum: Int, maximum: Int) = when {
     this < minimum -> minimum
     this > maximum -> maximum

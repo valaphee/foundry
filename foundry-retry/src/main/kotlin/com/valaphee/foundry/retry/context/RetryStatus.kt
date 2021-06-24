@@ -16,7 +16,7 @@ val CoroutineContext.retryStatus get() = get(RetryStatus) ?: error("No RetryStat
  */
 class RetryStatus(
     attempt: Int = 0,
-    previousDelay: Long = 0,
+    prevDelay: Long = 0,
     cumulativeDelay: Long = 0
 ) : AbstractCoroutineContextElement(RetryStatus) {
     companion object Key : CoroutineContext.Key<RetryStatus>
@@ -28,9 +28,9 @@ class RetryStatus(
             field = value
         }
 
-    var previousDelay = previousDelay
+    var prevDelay = prevDelay
         internal set(value) {
-            require(value >= 0) { "previousDelay must be non-negative: $previousDelay" }
+            require(value >= 0) { "prevDelay must be non-negative: $prevDelay" }
 
             field = value
         }
@@ -52,5 +52,5 @@ class RetryStatus(
         cumulativeDelay = cumulativeDelay sadd delay
     }
 
-    override fun toString() = "RetryStatus(attempt=$attempt, previousDelay=$previousDelay, cumulativeDelay=$cumulativeDelay)"
+    override fun toString() = "RetryStatus(attempt=$attempt, prevDelay=$prevDelay, cumulativeDelay=$cumulativeDelay)"
 }

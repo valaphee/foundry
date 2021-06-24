@@ -102,6 +102,45 @@ open class Float4x4 {
         matrix[15] = 1.0f
     }
 
+    fun setRotate(eulerX: Float, eulerY: Float, eulerZ: Float): Float4x4 {
+        val a = eulerX.toRad()
+        val b = eulerY.toRad()
+        val c = eulerZ.toRad()
+
+        val ci = cos(a)
+        val cj = cos(b)
+        val ch = cos(c)
+        val si = sin(a)
+        val sj = sin(b)
+        val sh = sin(c)
+        val cc = ci * ch
+        val cs = ci * sh
+        val sc = si * ch
+        val ss = si * sh
+
+        matrix[0] = cj * ch
+        matrix[4] = sj * sc - cs
+        matrix[8] = sj * cc + ss
+        matrix[12] = 0.0f
+
+        matrix[1] = cj * sh
+        matrix[5] = sj * ss + cc
+        matrix[9] = sj * cs - sc
+        matrix[13] = 0.0f
+
+        matrix[2] = -sj
+        matrix[6] = cj * si
+        matrix[10] = cj * ci
+        matrix[14] = 0.0f
+
+        matrix[3] = 0.0f
+        matrix[7] = 0.0f
+        matrix[11] = 0.0f
+        matrix[15] = 1.0f
+
+        return this
+    }
+
     fun setRotate(value: Float, axisX: Float, axisY: Float, axisZ: Float) = apply {
         var axisXVar = axisX
         var axisYVar = axisY
@@ -174,7 +213,7 @@ open class Float4x4 {
         }
     }
 
-    fun setRotation(quaternion: Float4) = apply {
+    fun setRotate(quaternion: Float4) = apply {
         val w = quaternion.w
         val x = quaternion.x
         val y = quaternion.y
@@ -357,7 +396,7 @@ open class Float4x4 {
         return result
     }
 
-    fun transpose() = transpose(Float4x4())
+    fun transpose() = transpose(_tmp1.get())
 
     fun transpose(result: Float4x4): Float4x4 {
         for (i in 0..3) {
@@ -371,8 +410,8 @@ open class Float4x4 {
     }
 
     fun invert(epsilon: Float = 0.0f): Boolean {
-        val result = Float4x4()
-        return invert(result, epsilon).also { if (it) set(result) }
+        val _tmp = _tmp1.get()
+        return invert(_tmp, epsilon).also { if (it) set(_tmp) }
     }
 
     fun invert(result: Float4x4, epsilon: Float = 0.0f): Boolean {
@@ -460,9 +499,9 @@ open class Float4x4 {
     }
 
     fun mul(value: Float4x4) = apply {
-        val result = Float4x4()
-        mul(value, result)
-        set(result)
+        val _tmp = _tmp1.get()
+        mul(value, _tmp)
+        set(_tmp)
     }
 
     fun mul(value: Float4x4, result: Float4x4): Float4x4 {
@@ -486,15 +525,19 @@ open class Float4x4 {
         return result
     }
 
-    fun rotate(value: Float, axisX: Float, axisY: Float, axisZ: Float) = set(mul(Float4x4().setRotate(value, axisX, axisY, axisZ), Float4x4()))
+    fun rotate(value: Float, axisX: Float, axisY: Float, axisZ: Float) = set(mul(_tmp1.get().setRotate(value, axisX, axisY, axisZ), _tmp2.get()))
 
     fun rotate(value: Float, axis: Float3) = rotate(value, axis.x, axis.y, axis.z)
 
-    fun rotate(value: Float, axisX: Float, axisY: Float, axisZ: Float, result: Float4x4) = mul(Float4x4().setRotate(value, axisX, axisY, axisZ), result)
+    fun rotate(value: Float, axisX: Float, axisY: Float, axisZ: Float, result: Float4x4) = set(mul(_tmp1.get().setRotate(value, axisX, axisY, axisZ), result))
 
     fun rotate(value: Float, axis: Float3, result: Float4x4) = rotate(value, axis.x, axis.y, axis.z, result)
 
-    fun rotate(value: Float3x3) = mul(Float4x4().setRotation(value), this)
+    fun rotate(eulerX: Float, eulerY: Float, eulerZ: Float) = set(mul(_tmp1.get().setRotate(eulerX, eulerY, eulerZ), _tmp2.get()))
+
+    fun rotate(eulerX: Float, eulerY: Float, eulerZ: Float, result: Float4x4) = set(mul(_tmp1.get().setRotate(eulerX, eulerY, eulerZ), result))
+
+    fun rotate(value: Float3x3) = set(mul(_tmp1.get().setIdentity().setRotation(value), _tmp2.get()))
 
     fun scale(value: Float) = scale(value, value, value)
 
@@ -556,6 +599,11 @@ open class Float4x4 {
         matrix[8], matrix[9], matrix[10], matrix[11],
         matrix[12], matrix[13], matrix[14], matrix[15],
     )
+
+    companion object {
+        val _tmp1 = ThreadLocal.withInitial { Float4x4() }
+        val _tmp2 = ThreadLocal.withInitial { Float4x4() }
+    }
 }
 
 /**
