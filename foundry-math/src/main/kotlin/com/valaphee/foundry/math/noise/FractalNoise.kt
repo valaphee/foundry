@@ -30,39 +30,39 @@ class FractalNoise(
     }
 
     override fun get(seed: Int, x: Float, y: Float): Float {
-        var x1 = x
-        var y1 = y
-        var _seed = seed
+        var x0 = x
+        var y0 = y
+        var seed0 = seed
         var sum: Float
         var amp = 1.0f
         return when (type) {
             FractalType.FBM -> {
-                sum = noise[_seed, x1, y1]
+                sum = noise[seed0, x0, y0]
                 for (i in 1 until octaves) {
-                    x1 *= lacunarity
-                    y1 *= lacunarity
+                    x0 *= lacunarity
+                    y0 *= lacunarity
                     amp *= gain
-                    sum += noise[++_seed, x1, y1] * amp
+                    sum += noise[++seed0, x0, y0] * amp
                 }
                 sum * bounding
             }
             FractalType.Billow -> {
-                sum = abs(noise[_seed, x1, y1]) * 2.0f - 1.0f
+                sum = abs(noise[seed0, x0, y0]) * 2.0f - 1.0f
                 for (i in 1 until octaves) {
-                    x1 *= lacunarity
-                    y1 *= lacunarity
+                    x0 *= lacunarity
+                    y0 *= lacunarity
                     amp *= gain
-                    sum += (abs(noise[++_seed, x1, y1]) * 2.0f - 1.0f) * amp
+                    sum += (abs(noise[++seed0, x0, y0]) * 2.0f - 1.0f) * amp
                 }
                 sum * bounding
             }
             FractalType.RigidMulti -> {
-                sum = 1.0f - abs(noise[_seed, x1, y1])
+                sum = 1.0f - abs(noise[seed0, x0, y0])
                 for (i in 1 until octaves) {
-                    x1 *= lacunarity
-                    y1 *= lacunarity
+                    x0 *= lacunarity
+                    y0 *= lacunarity
                     amp *= gain
-                    sum -= (1.0f - abs(noise[++_seed, x1, y1])) * amp
+                    sum -= (1.0f - abs(noise[++seed0, x0, y0])) * amp
                 }
                 sum
             }
@@ -70,43 +70,43 @@ class FractalNoise(
     }
 
     override fun get(seed: Int,  x: Float, y: Float, z: Float): Float {
-        var x1 = x
-        var y1 = y
-        var z1 = z
-        var _seed = seed
+        var x0 = x
+        var y0 = y
+        var z0 = z
+        var seed0 = seed
         var sum: Float
         var amp = 1.0f
         return when (type) {
             FractalType.FBM -> {
-                sum = noise[_seed, x1, y1, z1]
+                sum = noise[seed0, x0, y0, z0]
                 for (i in 1 until octaves) {
-                    x1 *= lacunarity
-                    y1 *= lacunarity
-                    z1 *= lacunarity
+                    x0 *= lacunarity
+                    y0 *= lacunarity
+                    z0 *= lacunarity
                     amp *= gain
-                    sum += noise[++_seed, x1, y1, z1] * amp
+                    sum += noise[++seed0, x0, y0, z0] * amp
                 }
                 sum * bounding
             }
             FractalType.Billow -> {
-                sum = abs(noise[_seed, x1, y1, z1]) * 2.0f - 1.0f
+                sum = abs(noise[seed0, x0, y0, z0]) * 2.0f - 1.0f
                 for (i in 1 until octaves) {
-                    x1 *= lacunarity
-                    y1 *= lacunarity
-                    z1 *= lacunarity
+                    x0 *= lacunarity
+                    y0 *= lacunarity
+                    z0 *= lacunarity
                     amp *= gain
-                    sum += (abs(noise[++_seed, x1, y1, z1]) * 2.0f - 1.0f) * amp
+                    sum += (abs(noise[++seed0, x0, y0, z0]) * 2.0f - 1.0f) * amp
                 }
                 sum * bounding
             }
             FractalType.RigidMulti -> {
-                sum = 1.0f - abs(noise[_seed, x1, y1, z1])
+                sum = 1.0f - abs(noise[seed0, x0, y0, z0])
                 for (i in 1 until octaves) {
-                    x1 *= lacunarity
-                    y1 *= lacunarity
-                    z1 *= lacunarity
+                    x0 *= lacunarity
+                    y0 *= lacunarity
+                    z0 *= lacunarity
                     amp *= gain
-                    sum -= (1 - abs(noise[_seed, x1, y1, z1])) * amp
+                    sum -= (1 - abs(noise[seed0, x0, y0, z0])) * amp
                 }
                 sum
             }

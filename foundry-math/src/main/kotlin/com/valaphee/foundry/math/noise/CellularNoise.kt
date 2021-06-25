@@ -16,153 +16,153 @@ import kotlin.math.min
  * @author Kevin Ludwig
  */
 class CellularNoise(
-    private val cellularDistanceFunction: CellularDistanceFunction = CellularDistanceFunction.Euclidean,
-    private val cellularReturnType: CellularReturnType = CellularReturnType.CellValue,
-    private val cellularNoiseLookup: Noise? = null,
-    private val cellularNoiseLookupSeed: Int = 0,
+    private val distanceFunction: CellularDistanceFunction = CellularDistanceFunction.Euclidean,
+    private val returnType: CellularReturnType = CellularReturnType.CellValue,
+    private val noiseLookup: Noise? = null,
+    private val noiseLookupSeed: Int = 0,
 ) : Noise {
     init {
-        require(cellularReturnType != CellularReturnType.NoiseLookup || cellularNoiseLookup != null)
+        require(returnType != CellularReturnType.NoiseLookup || noiseLookup != null)
     }
 
     override fun get(seed: Int, x: Float, y: Float): Float {
-        return when (cellularReturnType) {
+        return when (returnType) {
             CellularReturnType.CellValue, CellularReturnType.NoiseLookup, CellularReturnType.Distance -> {
-                val xr = fastRound(x)
-                val yr = fastRound(y)
+                val x1 = fastRound(x)
+                val y1 = fastRound(y)
                 var distance = 999999.0f
-                var xc = 0
-                var yc = 0
-                when (cellularDistanceFunction) {
+                var xr = 0
+                var yr = 0
+                when (distanceFunction) {
                     CellularDistanceFunction.Euclidean -> {
-                        var xi = xr - 1
-                        while (xi <= xr + 1) {
-                            var yi = yr - 1
-                            while (yi <= yr + 1) {
-                                val cell = cell2[hash(seed, xi, yi) and 255]
-                                val cellX = xi - x + cell.x
-                                val cellY = yi - y + cell.y
+                        var x0 = x1 - 1
+                        while (x0 <= x1 + 1) {
+                            var y0 = y1 - 1
+                            while (y0 <= y1 + 1) {
+                                val cell = cell2[hash(seed, x0, y0) and 255]
+                                val cellX = x0 - x + cell.x
+                                val cellY = y0 - y + cell.y
                                 val newDistance = cellX * cellX + cellY * cellY
                                 if (newDistance < distance) {
                                     distance = newDistance
-                                    xc = xi
-                                    yc = yi
+                                    xr = x0
+                                    yr = y0
                                 }
-                                yi++
+                                y0++
                             }
-                            xi++
+                            x0++
                         }
                     }
                     CellularDistanceFunction.Manhatten -> {
-                        var xi = xr - 1
-                        while (xi <= xr + 1) {
-                            var yi = yr - 1
-                            while (yi <= yr + 1) {
-                                val cell = cell2[hash(seed, xi, yi) and 255]
-                                val cellX = xi - x + cell.x
-                                val cellY = yi - y + cell.y
+                        var x0 = x1 - 1
+                        while (x0 <= x1 + 1) {
+                            var y0 = y1 - 1
+                            while (y0 <= y1 + 1) {
+                                val cell = cell2[hash(seed, x0, y0) and 255]
+                                val cellX = x0 - x + cell.x
+                                val cellY = y0 - y + cell.y
                                 val newDistance = abs(cellX) + abs(cellY)
                                 if (newDistance < distance) {
                                     distance = newDistance
-                                    xc = xi
-                                    yc = yi
+                                    xr = x0
+                                    yr = y0
                                 }
-                                yi++
+                                y0++
                             }
-                            xi++
+                            x0++
                         }
                     }
                     CellularDistanceFunction.Natural -> {
-                        var xi = xr - 1
-                        while (xi <= xr + 1) {
-                            var yi = yr - 1
-                            while (yi <= yr + 1) {
-                                val cell = cell2[hash(seed, xi, yi) and 255]
-                                val cellX = xi - x + cell.x
-                                val cellY = yi - y + cell.y
+                        var x0 = x1 - 1
+                        while (x0 <= x1 + 1) {
+                            var y0 = y1 - 1
+                            while (y0 <= y1 + 1) {
+                                val cell = cell2[hash(seed, x0, y0) and 255]
+                                val cellX = x0 - x + cell.x
+                                val cellY = y0 - y + cell.y
                                 val newDistance = abs(cellX) + abs(cellY) + (cellX * cellX + cellY * cellY)
                                 if (newDistance < distance) {
                                     distance = newDistance
-                                    xc = xi
-                                    yc = yi
+                                    xr = x0
+                                    yr = y0
                                 }
-                                yi++
+                                y0++
                             }
-                            xi++
+                            x0++
                         }
                     }
                 }
-                when (cellularReturnType) {
-                    CellularReturnType.CellValue -> valHash(0, xc, yc)
+                when (returnType) {
+                    CellularReturnType.CellValue -> valHash(0, xr, yr)
                     CellularReturnType.NoiseLookup -> {
-                        val cell = cell2[hash(seed, xc, yc) and 255]
-                        cellularNoiseLookup!![cellularNoiseLookupSeed, xc + cell.x, yc + cell.y]
+                        val cell = cell2[hash(seed, xr, yr) and 255]
+                        noiseLookup!![noiseLookupSeed, xr + cell.x, yr + cell.y]
                     }
-                    CellularReturnType.Distance -> distance - 1
+                    CellularReturnType.Distance -> distance - 1.0f
                     else -> 0.0f
                 }
             }
             else -> {
-                val xr = fastRound(x)
-                val yr = fastRound(y)
-                var distance = 999999f
-                var distance2 = 999999f
-                when (cellularDistanceFunction) {
+                val x1 = fastRound(x)
+                val y1 = fastRound(y)
+                var distance = 999999.0f
+                var distance2 = 999999.0f
+                when (distanceFunction) {
                     CellularDistanceFunction.Euclidean -> {
-                        var xi = xr - 1
-                        while (xi <= xr + 1) {
-                            var yi = yr - 1
-                            while (yi <= yr + 1) {
-                                val cell = cell2[hash(seed, xi, yi) and 255]
-                                val cellX = xi - x + cell.x
-                                val cellY = yi - y + cell.y
+                        var x0 = x1 - 1
+                        while (x0 <= x1 + 1) {
+                            var x0 = y1 - 1
+                            while (x0 <= y1 + 1) {
+                                val cell = cell2[hash(seed, x0, x0) and 255]
+                                val cellX = x0 - x + cell.x
+                                val cellY = x0 - y + cell.y
                                 val newDistance = cellX * cellX + cellY * cellY
                                 distance2 = max(min(distance2, newDistance), distance)
                                 distance = min(distance, newDistance)
-                                yi++
+                                x0++
                             }
-                            xi++
+                            x0++
                         }
                     }
                     CellularDistanceFunction.Manhatten -> {
-                        var xi = xr - 1
-                        while (xi <= xr + 1) {
-                            var yi = yr - 1
-                            while (yi <= yr + 1) {
-                                val cell = cell2[hash(seed, xi, yi) and 255]
-                                val cellX = xi - x + cell.x
-                                val cellY = yi - y + cell.y
+                        var x0 = x1 - 1
+                        while (x0 <= x1 + 1) {
+                            var y0 = y1 - 1
+                            while (y0 <= y1 + 1) {
+                                val cell = cell2[hash(seed, x0, y0) and 255]
+                                val cellX = x0 - x + cell.x
+                                val cellY = y0 - y + cell.y
                                 val newDistance = abs(cellX) + abs(cellY)
                                 distance2 = max(min(distance2, newDistance), distance)
                                 distance = min(distance, newDistance)
-                                yi++
+                                y0++
                             }
-                            xi++
+                            x0++
                         }
                     }
                     CellularDistanceFunction.Natural -> {
-                        var xi = xr - 1
-                        while (xi <= xr + 1) {
-                            var yi = yr - 1
-                            while (yi <= yr + 1) {
-                                val cell = cell2[hash(seed, xi, yi) and 255]
-                                val cellX = xi - x + cell.x
-                                val cellY = yi - y + cell.y
+                        var x0 = x1 - 1
+                        while (x0 <= x1 + 1) {
+                            var y0 = y1 - 1
+                            while (y0 <= y1 + 1) {
+                                val cell = cell2[hash(seed, x0, y0) and 255]
+                                val cellX = x0 - x + cell.x
+                                val cellY = y0 - y + cell.y
                                 val newDistance = abs(cellX) + abs(cellY) + (cellX * cellX + cellY * cellY)
                                 distance2 = max(min(distance2, newDistance), distance)
                                 distance = min(distance, newDistance)
-                                yi++
+                                y0++
                             }
-                            xi++
+                            x0++
                         }
                     }
                 }
-                when (cellularReturnType) {
-                    CellularReturnType.Distance2 -> distance2 - 1
-                    CellularReturnType.Distance2Add -> distance2 + distance - 1
-                    CellularReturnType.Distance2Sub -> distance2 - distance - 1
-                    CellularReturnType.Distance2Mul -> distance2 * distance - 1
-                    CellularReturnType.Distance2Div -> distance / distance2 - 1
+                when (returnType) {
+                    CellularReturnType.Distance2 -> distance2 - 1.0f
+                    CellularReturnType.Distance2Add -> distance2 + distance - 1.0f
+                    CellularReturnType.Distance2Sub -> distance2 - distance - 1.0f
+                    CellularReturnType.Distance2Mul -> distance2 * distance - 1.0f
+                    CellularReturnType.Distance2Div -> distance / distance2 - 1.0f
                     else -> 0.0f
                 }
             }
@@ -170,179 +170,179 @@ class CellularNoise(
     }
 
     override fun get(seed: Int, x: Float, y: Float, z: Float): Float {
-        return when (cellularReturnType) {
+        return when (returnType) {
             CellularReturnType.CellValue, CellularReturnType.NoiseLookup, CellularReturnType.Distance -> {
-                val xr = fastRound(x)
-                val yr = fastRound(y)
-                val zr = fastRound(z)
-                var distance = 999999f
-                var xc = 0
-                var yc = 0
-                var zc = 0
-                when (cellularDistanceFunction) {
+                val x1 = fastRound(x)
+                val y1 = fastRound(y)
+                val z1 = fastRound(z)
+                var distance = 999999.0f
+                var xr = 0
+                var yr = 0
+                var zr = 0
+                when (distanceFunction) {
                     CellularDistanceFunction.Euclidean -> {
-                        var xi = xr - 1
-                        while (xi <= xr + 1) {
-                            var yi = yr - 1
-                            while (yi <= yr + 1) {
-                                var zi = zr - 1
-                                while (zi <= zr + 1) {
-                                    val cell = cell3[hash(seed, xi, yi, zi) and 255]
-                                    val cellX = xi - x + cell.x
-                                    val cellY = yi - y + cell.y
-                                    val cellZ = zi - z + cell.z
+                        var x0 = x1 - 1
+                        while (x0 <= x1 + 1) {
+                            var y0 = y1 - 1
+                            while (y0 <= y1 + 1) {
+                                var z0 = z1 - 1
+                                while (z0 <= z1 + 1) {
+                                    val cell = cell3[hash(seed, x0, y0, z0) and 255]
+                                    val cellX = x0 - x + cell.x
+                                    val cellY = y0 - y + cell.y
+                                    val cellZ = z0 - z + cell.z
                                     val newDistance = cellX * cellX + cellY * cellY + cellZ * cellZ
                                     if (newDistance < distance) {
                                         distance = newDistance
-                                        xc = xi
-                                        yc = yi
-                                        zc = zi
+                                        xr = x0
+                                        yr = y0
+                                        zr = z0
                                     }
-                                    zi++
+                                    z0++
                                 }
-                                yi++
+                                y0++
                             }
-                            xi++
+                            x0++
                         }
                     }
                     CellularDistanceFunction.Manhatten -> {
-                        var xi = xr - 1
-                        while (xi <= xr + 1) {
-                            var yi = yr - 1
-                            while (yi <= yr + 1) {
-                                var zi = zr - 1
-                                while (zi <= zr + 1) {
-                                    val cell = cell3[hash(seed, xi, yi, zi) and 255]
-                                    val cellX = xi - x + cell.x
-                                    val cellY = yi - y + cell.y
-                                    val cellZ = zi - z + cell.z
+                        var x0 = x1 - 1
+                        while (x0 <= x1 + 1) {
+                            var y0 = y1 - 1
+                            while (y0 <= y1 + 1) {
+                                var z0 = z1 - 1
+                                while (z0 <= z1 + 1) {
+                                    val cell = cell3[hash(seed, x0, y0, z0) and 255]
+                                    val cellX = x0 - x + cell.x
+                                    val cellY = y0 - y + cell.y
+                                    val cellZ = z0 - z + cell.z
                                     val newDistance = abs(cellX) + abs(cellY) + abs(cellZ)
                                     if (newDistance < distance) {
                                         distance = newDistance
-                                        xc = xi
-                                        yc = yi
-                                        zc = zi
+                                        xr = x0
+                                        yr = y0
+                                        zr = z0
                                     }
-                                    zi++
+                                    z0++
                                 }
-                                yi++
+                                y0++
                             }
-                            xi++
+                            x0++
                         }
                     }
                     CellularDistanceFunction.Natural -> {
-                        var xi = xr - 1
-                        while (xi <= xr + 1) {
-                            var yi = yr - 1
-                            while (yi <= yr + 1) {
-                                var zi = zr - 1
-                                while (zi <= zr + 1) {
-                                    val cell = cell3[hash(seed, xi, yi, zi) and 255]
-                                    val cellX = xi - x + cell.x
-                                    val cellY = yi - y + cell.y
-                                    val cellZ = zi - z + cell.z
+                        var x0 = x1 - 1
+                        while (x0 <= x1 + 1) {
+                            var y0 = y1 - 1
+                            while (y0 <= y1 + 1) {
+                                var z0 = z1 - 1
+                                while (z0 <= z1 + 1) {
+                                    val cell = cell3[hash(seed, x0, y0, z0) and 255]
+                                    val cellX = x0 - x + cell.x
+                                    val cellY = y0 - y + cell.y
+                                    val cellZ = z0 - z + cell.z
                                     val newDistance = abs(cellX) + abs(cellY) + abs(cellZ) + (cellX * cellX + cellY * cellY + cellZ * cellZ)
                                     if (newDistance < distance) {
                                         distance = newDistance
-                                        xc = xi
-                                        yc = yi
-                                        zc = zi
+                                        xr = x0
+                                        yr = y0
+                                        zr = z0
                                     }
-                                    zi++
+                                    z0++
                                 }
-                                yi++
+                                y0++
                             }
-                            xi++
+                            x0++
                         }
                     }
                 }
-                when (cellularReturnType) {
-                    CellularReturnType.CellValue -> valHash(0, xc, yc, zc)
+                when (returnType) {
+                    CellularReturnType.CellValue -> valHash(0, xr, yr, zr)
                     CellularReturnType.NoiseLookup -> {
-                        val cell = cell3[hash(seed, xc, yc, zc) and 255]
-                        cellularNoiseLookup!![cellularNoiseLookupSeed, xc + cell.x, yc + cell.y, zc + cell.z]
+                        val cell = cell3[hash(seed, xr, yr, zr) and 255]
+                        noiseLookup!![noiseLookupSeed, xr + cell.x, yr + cell.y, zr + cell.z]
                     }
-                    CellularReturnType.Distance -> distance - 1
-                    else -> 0f
+                    CellularReturnType.Distance -> distance - 1.0f
+                    else -> 0.0f
                 }
             }
             else -> {
-                val xr = fastRound(x)
-                val yr = fastRound(y)
-                val zr = fastRound(z)
-                var distance = 999999f
-                var distance2 = 999999f
-                when (cellularDistanceFunction) {
+                val x1 = fastRound(x)
+                val y1 = fastRound(y)
+                val z1 = fastRound(z)
+                var distance = 999999.0f
+                var distance2 = 999999.0f
+                when (distanceFunction) {
                     CellularDistanceFunction.Euclidean -> {
-                        var xi = xr - 1
-                        while (xi <= xr + 1) {
-                            var yi = yr - 1
-                            while (yi <= yr + 1) {
-                                var zi = zr - 1
-                                while (zi <= zr + 1) {
-                                    val cell = cell3[hash(seed, xi, yi, zi) and 255]
-                                    val cellX = xi - x + cell.x
-                                    val cellY = yi - y + cell.y
-                                    val cellZ = zi - z + cell.z
+                        var x0 = x1 - 1
+                        while (x0 <= x1 + 1) {
+                            var y0 = y1 - 1
+                            while (y0 <= y1 + 1) {
+                                var z0 = z1 - 1
+                                while (z0 <= z1 + 1) {
+                                    val cell = cell3[hash(seed, x0, y0, z0) and 255]
+                                    val cellX = x0 - x + cell.x
+                                    val cellY = y0 - y + cell.y
+                                    val cellZ = z0 - z + cell.z
                                     val newDistance = cellX * cellX + cellY * cellY + cellZ * cellZ
                                     distance2 = max(min(distance2, newDistance), distance)
                                     distance = min(distance, newDistance)
-                                    zi++
+                                    z0++
                                 }
-                                yi++
+                                y0++
                             }
-                            xi++
+                            x0++
                         }
                     }
                     CellularDistanceFunction.Manhatten -> {
-                        var xi = xr - 1
-                        while (xi <= xr + 1) {
-                            var yi = yr - 1
-                            while (yi <= yr + 1) {
-                                var zi = zr - 1
-                                while (zi <= zr + 1) {
-                                    val cell = cell3[hash(seed, xi, yi, zi) and 255]
-                                    val cellX = xi - x + cell.x
-                                    val cellY = yi - y + cell.y
-                                    val cellZ = zi - z + cell.z
+                        var x0 = x1 - 1
+                        while (x0 <= x1 + 1) {
+                            var y0 = y1 - 1
+                            while (y0 <= y1 + 1) {
+                                var z0 = z1 - 1
+                                while (z0 <= z1 + 1) {
+                                    val cell = cell3[hash(seed, x0, y0, z0) and 255]
+                                    val cellX = x0 - x + cell.x
+                                    val cellY = y0 - y + cell.y
+                                    val cellZ = z0 - z + cell.z
                                     val newDistance = abs(cellX) + abs(cellY) + abs(cellZ)
                                     distance2 = max(min(distance2, newDistance), distance)
                                     distance = min(distance, newDistance)
-                                    zi++
+                                    z0++
                                 }
-                                yi++
+                                y0++
                             }
-                            xi++
+                            x0++
                         }
                     }
                     CellularDistanceFunction.Natural -> {
-                        var xi = xr - 1
-                        while (xi <= xr + 1) {
-                            var yi = yr - 1
-                            while (yi <= yr + 1) {
-                                var zi = zr - 1
-                                while (zi <= zr + 1) {
-                                    val cell = cell3[hash(seed, xi, yi, zi) and 255]
-                                    val cellX = xi - x + cell.x
-                                    val cellY = yi - y + cell.y
-                                    val cellZ = zi - z + cell.z
+                        var x0 = x1 - 1
+                        while (x0 <= x1 + 1) {
+                            var y0 = y1 - 1
+                            while (y0 <= y1 + 1) {
+                                var z0 = z1 - 1
+                                while (z0 <= z1 + 1) {
+                                    val cell = cell3[hash(seed, x0, y0, z0) and 255]
+                                    val cellX = x0 - x + cell.x
+                                    val cellY = y0 - y + cell.y
+                                    val cellZ = z0 - z + cell.z
                                     val newDistance = abs(cellX) + abs(cellY) + abs(cellZ) + (cellX * cellX + cellY * cellY + cellZ * cellZ)
                                     distance2 = max(min(distance2, newDistance), distance)
                                     distance = min(distance, newDistance)
-                                    zi++
+                                    z0++
                                 }
-                                yi++
+                                y0++
                             }
-                            xi++
+                            x0++
                         }
                     }
                 }
-                when (cellularReturnType) {
-                    CellularReturnType.Distance2 -> distance2 - 1
-                    CellularReturnType.Distance2Add -> distance2 + distance - 1
-                    CellularReturnType.Distance2Sub -> distance2 - distance - 1
-                    CellularReturnType.Distance2Mul -> distance2 * distance - 1
-                    CellularReturnType.Distance2Div -> distance / distance2 - 1
+                when (returnType) {
+                    CellularReturnType.Distance2 -> distance2 - 1.0f
+                    CellularReturnType.Distance2Add -> distance2 + distance - 1.0f
+                    CellularReturnType.Distance2Sub -> distance2 - distance - 1.0f
+                    CellularReturnType.Distance2Mul -> distance2 * distance - 1.0f
+                    CellularReturnType.Distance2Div -> distance / distance2 - 1.0f
                     else -> 0.0f
                 }
             }
@@ -350,7 +350,7 @@ class CellularNoise(
     }
 
     companion object {
-        private val cell2 = arrayOf(
+        internal val cell2 = arrayOf(
             Float2(-0.4313539279f, 0.1281943404f), Float2(-0.1733316799f, 0.415278375f), Float2(-0.2821957395f, -0.3505218461f), Float2(-0.2806473808f, 0.3517627718f), Float2(0.3125508975f, -0.3237467165f), Float2(0.3383018443f, -0.2967353402f), Float2(-0.4393982022f, -0.09710417025f), Float2(-0.4460443703f, -0.05953502905f),
             Float2(-0.302223039f, 0.3334085102f), Float2(-0.212681052f, -0.3965687458f), Float2(-0.2991156529f, 0.3361990872f), Float2(0.2293323691f, 0.3871778202f), Float2(0.4475439151f, -0.04695150755f), Float2(0.1777518f, 0.41340573f), Float2(0.1688522499f, -0.4171197882f), Float2(-0.0976597166f, 0.4392750616f),
             Float2(0.08450188373f, 0.4419948321f), Float2(-0.4098760448f, -0.1857461384f), Float2(0.3476585782f, -0.2857157906f), Float2(-0.3350670039f, -0.30038326f), Float2(0.2298190031f, -0.3868891648f), Float2(-0.01069924099f, 0.449872789f), Float2(-0.4460141246f, -0.05976119672f), Float2(0.3650293864f, 0.2631606867f),
@@ -384,7 +384,7 @@ class CellularNoise(
             Float2(0.1475103971f, -0.4251360756f), Float2(0.09258030352f, 0.4403735771f), Float2(-0.1589664637f, -0.4209865359f), Float2(0.2482445008f, 0.3753327428f), Float2(0.4383624232f, -0.1016778537f), Float2(0.06242802956f, 0.4456486745f), Float2(0.2846591015f, -0.3485243118f), Float2(-0.344202744f, -0.2898697484f),
             Float2(0.1198188883f, -0.4337550392f), Float2(-0.243590703f, 0.3783696201f), Float2(0.2958191174f, -0.3391033025f), Float2(-0.1164007991f, 0.4346847754f), Float2(0.1274037151f, -0.4315881062f), Float2(0.368047306f, 0.2589231171f), Float2(0.2451436949f, 0.3773652989f), Float2(-0.4314509715f, 0.12786735f)
         )
-        private val cell3 = arrayOf(
+        internal val cell3 = arrayOf(
             Float3(0.1453787434f, -0.4149781685f, -0.0956981749f), Float3(-0.01242829687f, -0.1457918398f, -0.4255470325f), Float3(0.2877979582f, -0.02606483451f, -0.3449535616f), Float3(-0.07732986802f, 0.2377094325f, 0.3741848704f), Float3(0.1107205875f, -0.3552302079f, -0.2530858567f), Float3(0.2755209141f, 0.2640521179f, -0.238463215f), Float3(0.294168941f, 0.1526064594f, 0.3044271714f), Float3(0.4000921098f, -0.2034056362f, 0.03244149937f),
             Float3(-0.1697304074f, 0.3970864695f, -0.1265461359f), Float3(-0.1483224484f, -0.3859694688f, 0.1775613147f), Float3(0.2623596946f, -0.2354852944f, 0.2796677792f), Float3(-0.2709003183f, 0.3505271138f, -0.07901746678f), Float3(-0.03516550699f, 0.3885234328f, 0.2243054374f), Float3(-0.1267712655f, 0.1920044036f, 0.3867342179f), Float3(0.02952021915f, 0.4409685861f, 0.08470692262f), Float3(-0.2806854217f, -0.266996757f, 0.2289725438f),
             Float3(-0.171159547f, 0.2141185563f, 0.3568720405f), Float3(0.2113227183f, 0.3902405947f, -0.07453178509f), Float3(-0.1024352839f, 0.2128044156f, -0.3830421561f), Float3(-0.3304249877f, -0.1566986703f, 0.2622305365f), Float3(0.2091111325f, 0.3133278055f, -0.2461670583f), Float3(0.344678154f, -0.1944240454f, -0.2142341261f), Float3(0.1984478035f, -0.3214342325f, -0.2445373252f), Float3(-0.2929008603f, 0.2262915116f, 0.2559320961f),
