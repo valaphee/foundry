@@ -14,7 +14,7 @@ import com.valaphee.foundry.math.lerp
  * @author Kevin Ludwig
  */
 class PerlinNoise(
-    private val interpolationType: InterpolationType
+    private val interpolationType: InterpolationType = InterpolationType.Quintic
 ) : Noise {
     override fun get(seed: Int, x: Float, y: Float): Float {
         val x0 = fastFloor(x)

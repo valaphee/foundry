@@ -21,6 +21,10 @@ class CellularNoise(
     private val cellularNoiseLookup: Noise? = null,
     private val cellularNoiseLookupSeed: Int = 0,
 ) : Noise {
+    init {
+        require(cellularReturnType != CellularReturnType.NoiseLookup || cellularNoiseLookup != null)
+    }
+
     override fun get(seed: Int, x: Float, y: Float): Float {
         return when (cellularReturnType) {
             CellularReturnType.CellValue, CellularReturnType.NoiseLookup, CellularReturnType.Distance -> {

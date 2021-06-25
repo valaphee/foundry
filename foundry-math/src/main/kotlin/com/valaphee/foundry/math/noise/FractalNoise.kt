@@ -32,37 +32,37 @@ class FractalNoise(
     override fun get(seed: Int, x: Float, y: Float): Float {
         var x1 = x
         var y1 = y
-        var seed = seed
+        var _seed = seed
         var sum: Float
         var amp = 1.0f
         return when (type) {
             FractalType.FBM -> {
-                sum = noise[seed, x1, y1]
+                sum = noise[_seed, x1, y1]
                 for (i in 1 until octaves) {
                     x1 *= lacunarity
                     y1 *= lacunarity
                     amp *= gain
-                    sum += noise[++seed, x1, y1] * amp
+                    sum += noise[++_seed, x1, y1] * amp
                 }
                 sum * bounding
             }
             FractalType.Billow -> {
-                sum = abs(noise[seed, x1, y1]) * 2.0f - 1.0f
+                sum = abs(noise[_seed, x1, y1]) * 2.0f - 1.0f
                 for (i in 1 until octaves) {
                     x1 *= lacunarity
                     y1 *= lacunarity
                     amp *= gain
-                    sum += (abs(noise[++seed, x1, y1]) * 2.0f - 1.0f) * amp
+                    sum += (abs(noise[++_seed, x1, y1]) * 2.0f - 1.0f) * amp
                 }
                 sum * bounding
             }
             FractalType.RigidMulti -> {
-                sum = 1.0f - abs(noise[seed, x1, y1])
+                sum = 1.0f - abs(noise[_seed, x1, y1])
                 for (i in 1 until octaves) {
                     x1 *= lacunarity
                     y1 *= lacunarity
                     amp *= gain
-                    sum -= (1.0f - abs(noise[++seed, x1, y1])) * amp
+                    sum -= (1.0f - abs(noise[++_seed, x1, y1])) * amp
                 }
                 sum
             }
@@ -73,40 +73,40 @@ class FractalNoise(
         var x1 = x
         var y1 = y
         var z1 = z
-        var seed = seed
+        var _seed = seed
         var sum: Float
         var amp = 1.0f
         return when (type) {
             FractalType.FBM -> {
-                sum = noise[seed, x1, y1, z1]
+                sum = noise[_seed, x1, y1, z1]
                 for (i in 1 until octaves) {
                     x1 *= lacunarity
                     y1 *= lacunarity
                     z1 *= lacunarity
                     amp *= gain
-                    sum += noise[++seed, x1, y1, z1] * amp
+                    sum += noise[++_seed, x1, y1, z1] * amp
                 }
                 sum * bounding
             }
             FractalType.Billow -> {
-                sum = abs(noise[seed, x1, y1, z1]) * 2.0f - 1.0f
+                sum = abs(noise[_seed, x1, y1, z1]) * 2.0f - 1.0f
                 for (i in 1 until octaves) {
                     x1 *= lacunarity
                     y1 *= lacunarity
                     z1 *= lacunarity
                     amp *= gain
-                    sum += (abs(noise[++seed, x1, y1, z1]) * 2.0f - 1.0f) * amp
+                    sum += (abs(noise[++_seed, x1, y1, z1]) * 2.0f - 1.0f) * amp
                 }
                 sum * bounding
             }
             FractalType.RigidMulti -> {
-                sum = 1.0f - abs(noise[seed, x1, y1, z1])
+                sum = 1.0f - abs(noise[_seed, x1, y1, z1])
                 for (i in 1 until octaves) {
                     x1 *= lacunarity
                     y1 *= lacunarity
                     z1 *= lacunarity
                     amp *= gain
-                    sum -= (1 - abs(noise[seed, x1, y1, z1])) * amp
+                    sum -= (1 - abs(noise[_seed, x1, y1, z1])) * amp
                 }
                 sum
             }
