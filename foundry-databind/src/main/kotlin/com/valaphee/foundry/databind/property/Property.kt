@@ -160,8 +160,10 @@ open class DefaultProperty<T : Any>(
     }
 
     private fun checkSelfBinding(other: ObservableValue<Any>) {
-        require(this !== other) { "Can't bind a property to itself" }
+        require(this !== other) { "Can't bind property to itself" }
+    }
+
+    companion object {
+        private val log = LogManager.getLogger(Property::class.java)
     }
 }
-
-private val log = LogManager.getLogger(Property::class.java)

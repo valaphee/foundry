@@ -22,7 +22,7 @@ class CellularNoise(
     private val noiseLookupSeed: Int = 0,
 ) : Noise {
     init {
-        require(returnType != CellularReturnType.NoiseLookup || noiseLookup != null)
+        require(returnType != CellularReturnType.NoiseLookup || noiseLookup != null) { "Noise lookup is null" }
     }
 
     override fun get(seed: Int, x: Float, y: Float): Float {

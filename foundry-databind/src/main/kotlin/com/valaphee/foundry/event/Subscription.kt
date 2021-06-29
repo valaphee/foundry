@@ -6,6 +6,7 @@
 package com.valaphee.foundry.event
 
 import com.valaphee.foundry.util.Disposable
+import org.apache.logging.log4j.LogManager
 
 /**
  * @author Kevin Ludwig
@@ -24,3 +25,5 @@ fun Subscriptions.dispose() {
     }
     clear()
 }
+
+private val log = LogManager.getLogger(Subscription::class.java)

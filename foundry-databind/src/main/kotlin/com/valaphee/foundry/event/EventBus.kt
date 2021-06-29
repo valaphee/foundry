@@ -80,7 +80,7 @@ class DefaultEventBus : EventBus {
         subscribers.get()[SubscriberKey(scope, event.key)]?.let {
             it.forEach {
                 try {
-                    if (it.callback.fixType().invoke(event) is DisposeSubscription) it.dispose()
+                    if ((it.callback as (Event) -> CallbackResult).invoke(event) is DisposeSubscription) it.dispose()
                 } catch (ex: Exception) {
                     log.warn("Cancelling failed subscription $it", ex)
                     try {
@@ -165,6 +165,10 @@ class DefaultEventBus : EventBus {
             }
         }
     }
+
+    companion object {
+        private val log = LogManager.getLogger(DefaultEventBus::class.java)
+    }
 }
 
 /**
@@ -226,7 +230,7 @@ class DefaultUnscopedEventBus : UnscopedEventBus() {
         subscribers.get().let {
             it.forEach {
                 try {
-                    if (it.callback.fixType().invoke(event) is DisposeSubscription) it.dispose()
+                    if ((it.callback as (Event) -> CallbackResult).invoke(event) is DisposeSubscription) it.dispose()
                 } catch (ex: Exception) {
                     log.warn("Cancelling failed subscription $it", ex)
                     try {
@@ -298,9 +302,8 @@ class DefaultUnscopedEventBus : UnscopedEventBus() {
             }
         }
     }
+
+    companion object {
+        private val log = LogManager.getLogger(DefaultUnscopedEventBus::class.java)
+    }
 }
-
-internal val log = LogManager.getLogger(EventBus::class.java)
-
-@Suppress("UNCHECKED_CAST")
-private fun ((Nothing) -> CallbackResult).fixType() = this as (Event) -> CallbackResult
