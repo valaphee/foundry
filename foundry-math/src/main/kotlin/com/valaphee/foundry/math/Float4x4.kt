@@ -601,8 +601,8 @@ open class Float4x4 {
     )
 
     companion object {
-        val _tmp1 = ThreadLocal.withInitial { Float4x4() }
-        val _tmp2 = ThreadLocal.withInitial { Float4x4() }
+        private val _tmp1 = ThreadLocal.withInitial { Float4x4() }
+        private val _tmp2 = ThreadLocal.withInitial { Float4x4() }
     }
 }
 

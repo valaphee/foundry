@@ -95,7 +95,7 @@ open class DefaultProperty<T : Any>(
 
     override fun onChange(callback: (ObservableValueChanged<T>) -> Unit): Subscription {
         /*log.trace("Subscribing to changes to property $this")*/
-        return onChange.subscribeWithoutResult<ObservableValueChanged<T>>() { callback(it) }
+        return onChange.subscribeWithoutResult<ObservableValueChanged<T>> { callback(it) }
     }
 
     override fun bind(other: Property<T>, updateWhenBound: Boolean) = bind(other, updateWhenBound, identityConverter)
