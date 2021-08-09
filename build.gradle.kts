@@ -8,7 +8,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("com.palantir.git-version") version "0.12.3"
     `java-library`
-    kotlin("jvm") version "1.5.10"
+    kotlin("jvm") version "1.5.30-M1"
     `maven-publish`
     signing
 }
@@ -67,17 +67,17 @@ subprojects {
             create<MavenPublication>("maven") {
                 pom.apply {
                     name.set(project.name)
-                    description.set("Toolkit")
-                    url.set("https://github.com/Valaphee/foundry")
+                    description.set("")
+                    url.set("https://github.com/valaphee/foundry")
                     scm {
-                        connection.set("https://github.com/Valaphee/foundry.git")
-                        developerConnection.set("https://github.com/Valaphee/foundry.git")
-                        url.set("https://github.com/Valaphee/foundry")
+                        connection.set("https://github.com/valaphee/foundry.git")
+                        developerConnection.set("https://github.com/valaphee/foundry.git")
+                        url.set("https://github.com/valaphee/foundry")
                     }
                     licenses {
                         license {
                             name.set("All rights reserved")
-                            url.set("https://raw.githubusercontent.com/Valaphee/foundry/master/LICENSE.txt")
+                            url.set("https://raw.githubusercontent.com/valaphee/foundry/master/LICENSE.txt")
                         }
                     }
                     developers {
