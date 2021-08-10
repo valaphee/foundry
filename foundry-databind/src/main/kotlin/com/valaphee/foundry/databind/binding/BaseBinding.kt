@@ -9,9 +9,9 @@ import com.valaphee.foundry.databind.ObservableValueChanged
 import com.valaphee.foundry.databind.property.InternalProperty
 import com.valaphee.foundry.databind.value.ObservableValue
 import com.valaphee.foundry.event.Subscriptions
-import com.valaphee.foundry.event.UnscopedEventBus
 import com.valaphee.foundry.event.dispose
 import com.valaphee.foundry.event.subscribeWithoutResult
+import com.valaphee.foundry.event.unscopedEventBus
 import com.valaphee.foundry.util.DisposeState
 import com.valaphee.foundry.util.NotDisposed
 
@@ -32,7 +32,7 @@ abstract class BaseBinding<S : Any, T : Any>(
     override var disposeState: DisposeState = NotDisposed
         internal set
 
-    protected val onChange = UnscopedEventBus.create()
+    protected val onChange = unscopedEventBus()
 
     override fun dispose(disposeState: DisposeState) {
         this.disposeState = disposeState

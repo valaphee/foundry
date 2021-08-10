@@ -14,7 +14,7 @@ class WhiteNoise: Noise {
     override fun get(seed: Int, x: Float, y: Float, z: Float) = valHash(seed, hash(x), hash(y), hash(z))
 
     private fun hash(value: Float): Int {
-        val hash = java.lang.Float.floatToRawIntBits(value)
+        val hash = value.toRawBits()
         return hash xor (hash shr 16)
     }
 }

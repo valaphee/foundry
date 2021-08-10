@@ -7,8 +7,8 @@ package com.valaphee.foundry.databind.value
 
 import com.valaphee.foundry.databind.ObservableValueChanged
 import com.valaphee.foundry.databind.toAtom
-import com.valaphee.foundry.event.UnscopedEventBus
 import com.valaphee.foundry.event.subscribeWithoutResult
+import com.valaphee.foundry.event.unscopedEventBus
 
 /**
  * @author Kevin Ludwig
@@ -21,7 +21,7 @@ class CompositeObservableValue<T : Any>(
 
     override val value get() = atom.get()
 
-    private val onChange = UnscopedEventBus.create()
+    private val onChange = unscopedEventBus()
 
     init {
         sources.forEach { (value, convert) ->

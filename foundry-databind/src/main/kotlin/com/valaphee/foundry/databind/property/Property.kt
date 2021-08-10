@@ -29,8 +29,8 @@ import com.valaphee.foundry.databind.value.ValueValidationFailedException
 import com.valaphee.foundry.databind.value.ValueValidationSuccessful
 import com.valaphee.foundry.databind.value.WritableValue
 import com.valaphee.foundry.event.Subscription
-import com.valaphee.foundry.event.UnscopedEventBus
 import com.valaphee.foundry.event.subscribeWithoutResult
+import com.valaphee.foundry.event.unscopedEventBus
 import com.valaphee.foundry.util.Predicate
 import org.apache.logging.log4j.LogManager
 
@@ -82,7 +82,7 @@ open class DefaultProperty<T : Any>(
     private val atom = initialValue.toAtom()
     private val identityConverter = IdentityConverter<T>()
 
-    private val onChange = UnscopedEventBus.create()
+    private val onChange = unscopedEventBus()
 
     override fun updateValue(newValue: T) = transformValue { newValue }
 

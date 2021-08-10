@@ -28,11 +28,9 @@ interface EventBus {
     fun cancelScope(scope: EventScope)
 
     fun close()
-
-    companion object {
-        fun create(): EventBus = DefaultEventBus()
-    }
 }
+
+fun eventBus(): EventBus = DefaultEventBus()
 
 inline fun <reified T : Event> EventBus.subscribeToWithoutResult(eventScope: EventScope = GlobalScope, noinline callback: (T) -> Unit) = subscribeTo<T>(eventScope, checkNotNull(T::class.simpleName)) {
     callback(it)
@@ -192,11 +190,9 @@ interface UnscopedEventBus : EventBus {
     override fun cancelScope(scope: EventScope) = cancel()
 
     override fun close() = cancel()
-
-    companion object {
-        fun create(): UnscopedEventBus = DefaultUnscopedEventBus()
-    }
 }
+
+fun unscopedEventBus(): UnscopedEventBus = DefaultUnscopedEventBus()
 
 inline fun <reified T : Event> UnscopedEventBus.subscribeWithoutResult(noinline callback: (T) -> Unit) = subscribe<T> {
     callback(it)

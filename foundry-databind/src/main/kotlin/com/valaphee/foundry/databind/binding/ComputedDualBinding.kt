@@ -9,9 +9,9 @@ import com.valaphee.foundry.databind.ObservableValueChanged
 import com.valaphee.foundry.databind.property.toInternalProperty
 import com.valaphee.foundry.databind.value.ObservableValue
 import com.valaphee.foundry.event.Subscription
-import com.valaphee.foundry.event.UnscopedEventBus
 import com.valaphee.foundry.event.dispose
 import com.valaphee.foundry.event.subscribeToWithoutResult
+import com.valaphee.foundry.event.unscopedEventBus
 import com.valaphee.foundry.util.DisposeState
 import com.valaphee.foundry.util.NotDisposed
 
@@ -35,7 +35,7 @@ class ComputedDualBinding<out S0 : Any, out S1 : Any, T : Any>(
         internal set
 
     private val subscriptions = mutableListOf<Subscription>()
-    private val onChange = UnscopedEventBus.create()
+    private val onChange = unscopedEventBus()
 
     init {
         subscriptions.add(source0.onChange {
