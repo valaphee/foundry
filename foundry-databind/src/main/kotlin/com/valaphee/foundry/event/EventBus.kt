@@ -174,20 +174,20 @@ class DefaultEventBus : EventBus {
 /**
  * @author Kevin Ludwig
  */
-abstract class UnscopedEventBus : EventBus {
-    abstract fun fetchSubscribers(): Iterable<Subscription>
+interface UnscopedEventBus : EventBus {
+    fun fetchSubscribers(): Iterable<Subscription>
 
     override fun fetchSubscribersOf(scope: EventScope, key: String): Iterable<Subscription> = fetchSubscribers()
 
-    abstract fun <T : Event> subscribe(callback: (T) -> CallbackResult): Subscription
+    fun <T : Event> subscribe(callback: (T) -> CallbackResult): Subscription
 
     override fun <T : Event> subscribeTo(scope: EventScope, key: String, callback: (T) -> CallbackResult): Subscription = subscribe(callback)
 
-    abstract fun publish(event: Event)
+    fun publish(event: Event)
 
     override fun publish(event: Event, scope: EventScope) = publish(event)
 
-    abstract fun cancel()
+    fun cancel()
 
     override fun cancelScope(scope: EventScope) = cancel()
 
@@ -206,7 +206,7 @@ inline fun <reified T : Event> UnscopedEventBus.subscribeWithoutResult(noinline 
 /**
  * @author Kevin Ludwig
  */
-class DefaultUnscopedEventBus : UnscopedEventBus() {
+class DefaultUnscopedEventBus : UnscopedEventBus {
     @Volatile
     private var subscribers = persistentListOf<DefaultGlobalSubscription<*>>().toAtom()
 
