@@ -22,7 +22,7 @@ class CellularNoise(
     private val noiseLookupSeed: Int = 0,
 ) : Noise {
     init {
-        require(returnType != CellularReturnType.NoiseLookup || noiseLookup != null) { "Noise lookup is null" }
+        require(returnType != CellularReturnType.NoiseLookup || noiseLookup != null)
     }
 
     override fun get(seed: Int, x: Float, y: Float): Float {
@@ -111,15 +111,15 @@ class CellularNoise(
                     CellularDistanceFunction.Euclidean -> {
                         var x0 = x1 - 1
                         while (x0 <= x1 + 1) {
-                            var x0 = y1 - 1
-                            while (x0 <= y1 + 1) {
-                                val cell = cell2[hash(seed, x0, x0) and 255]
+                            var y0 = y1 - 1
+                            while (y0 <= y1 + 1) {
+                                val cell = cell2[hash(seed, x0, y0) and 255]
                                 val cellX = x0 - x + cell.x
-                                val cellY = x0 - y + cell.y
+                                val cellY = y0 - y + cell.y
                                 val newDistance = cellX * cellX + cellY * cellY
                                 distance2 = max(min(distance2, newDistance), distance)
                                 distance = min(distance, newDistance)
-                                x0++
+                                y0++
                             }
                             x0++
                         }
