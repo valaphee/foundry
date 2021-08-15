@@ -40,22 +40,22 @@ class Ray {
     fun sphereIntersection(center: Float3, radius: Float, result: MutableFloat3): Boolean {
         result.set(origin).sub(center)
         val a = direction * direction
-        val b = result * direction * 2f
+        val b = result * direction * 2
         val c = result * result - radius * radius
         val discriminant = b * b - 4 * a * c
 
-        if (discriminant < 0f) return false
+        if (discriminant < 0) return false
 
         val numerator = -b - sqrt(discriminant)
-        if (numerator > 0f) {
-            val d = numerator / (2f * a)
+        if (numerator > 0) {
+            val d = numerator / (2 * a)
             result.set(direction).scale(d).add(origin)
             return true
         }
 
         val numerator2 = -b + sqrt(discriminant)
-        if (numerator2 > 0f) {
-            val d = numerator2 / (2f * a)
+        if (numerator2 > 0) {
+            val d = numerator2 / (2 * a)
             result.set(direction).scale(d).add(origin)
             return true
         }

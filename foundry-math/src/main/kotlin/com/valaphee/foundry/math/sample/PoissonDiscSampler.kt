@@ -7,6 +7,7 @@ package com.valaphee.foundry.math.sample
 
 import com.valaphee.foundry.math.Float2
 import com.valaphee.foundry.math.Int2
+import com.valaphee.foundry.math.defaultRandom
 import com.valaphee.foundry.math.noise.Noise
 import kotlin.math.PI
 import kotlin.math.cos
@@ -25,7 +26,7 @@ class PoissonDiscSampler(
     private val count: Int = 30,
     private val minimumDistance: Float,
     private val noise: Noise,
-    private val random: Random
+    private val random: Random = defaultRandom
 ) {
     private val size = Float2(maximum.x - minimum.x, maximum.y - minimum.y)
     private val cellSize = minimumDistance / sqrt(2.0f)

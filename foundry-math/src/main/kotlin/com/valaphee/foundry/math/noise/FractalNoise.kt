@@ -69,7 +69,7 @@ class FractalNoise(
         }
     }
 
-    override fun get(seed: Int,  x: Float, y: Float, z: Float): Float {
+    override fun get(seed: Int, x: Float, y: Float, z: Float): Float {
         var x0 = x
         var y0 = y
         var z0 = z

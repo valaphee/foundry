@@ -13,7 +13,8 @@ private const val yPrime = 31337
 private const val zPrime = 6971
 private val gradient2 = arrayOf(
     Float2(-1f, -1f), Float2(1f, -1f), Float2(-1f, 1f), Float2(1f, 1f),
-    Float2(1f, -1f), Float2(-1f, 1f), Float2(1f, 1f), Float2(1f, 1f))
+    Float2(1f, -1f), Float2(-1f, 1f), Float2(1f, 1f), Float2(1f, 1f)
+)
 private val gradient3 = arrayOf(
     Float3(1f, 1f, 1f), Float3(-1f, 1f, 1f), Float3(1f, -1f, 1f), Float3(-1f, -1f, 1f),
     Float3(1f, 1f, 1f), Float3(-1f, 1f, 1f), Float3(1f, 1f, -1f), Float3(-1f, 1f, -1f),

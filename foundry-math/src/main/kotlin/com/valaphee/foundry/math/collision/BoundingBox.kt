@@ -172,21 +172,21 @@ class BoundingBox() {
 
         var x = 0.0f
         var result = point.x - minimum.x
-        if (result < 0.0f) x = result else {
+        if (result < 0) x = result else {
             result = maximum.x - point.x
-            if (result < 0.0f) x = result
+            if (result < 0) x = result
         }
         var y = 0.0f
         result = point.y - minimum.y
-        if (result < 0.0f) y = result else {
+        if (result < 0) y = result else {
             result = maximum.y - point.y
-            if (result < 0.0f) y = result
+            if (result < 0) y = result
         }
         var z = 0.0f
         result = point.z - minimum.z
-        if (result < 0.0f) z = result else {
+        if (result < 0) z = result else {
             result = maximum.z - point.z
-            if (result < 0.0f) z = result
+            if (result < 0) z = result
         }
 
         return x * x + y * y + z * z
@@ -209,10 +209,10 @@ class BoundingBox() {
             maximumX = (minimum.x - ray.origin.x) * result
         }
 
-        result = 1.0f / ray.direction.y
+        result = 1 / ray.direction.y
         val minimumY: Float
         val maximumY: Float
-        if (result >= 0.0f) {
+        if (result >= 0) {
             minimumY = (minimum.y - ray.origin.y) * result
             maximumY = (maximum.y - ray.origin.y) * result
         } else {
@@ -224,10 +224,10 @@ class BoundingBox() {
         if (minimumY > minimumX) minimumX = minimumY
         if (maximumY < maximumX) maximumX = maximumY
 
-        result = 1.0f / ray.direction.z
+        result = 1 / ray.direction.z
         val minimumZ: Float
         val maximumZ: Float
-        if (result >= 0.0f) {
+        if (result >= 0) {
             minimumZ = (minimum.z - ray.origin.z) * result
             maximumZ = (maximum.z - ray.origin.z) * result
         } else {

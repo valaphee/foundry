@@ -12,7 +12,7 @@ fun encodeMorton(x: Int, y: Int, z: Int) = (morton256Lut[z] shl 2) or (morton256
 fun decodeMorton(morton: Int): Int3 {
     fun unpack(lut: IntArray): Int {
         var value = 0
-        for (i in 0 until 3) { value = value or (lut[(morton shr (i * 9)) and 0x1FF] shl (3 * i)) }
+        for (i in 0 until 3) value = value or (lut[(morton shr (i * 9)) and 0x1FF] shl (3 * i))
         return value
     }
 
