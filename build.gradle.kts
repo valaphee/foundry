@@ -48,8 +48,9 @@ subprojects {
     apply(plugin = "signing")
 
     group = "com.valaphee"
-    val gitVersion: groovy.lang.Closure<String> by extra
-    version = gitVersion()
+    val versionDetails: groovy.lang.Closure<com.palantir.gradle.gitversion.VersionDetails> by extra
+    val details = versionDetails()
+    version = "${details.lastTag}.${details.commitDistance}${if (!details.isCleanTag) ".dirty" else ""}${if (details.branchName != "master") "-${details.branchName.split('/').last()}" else ""}"
 
     dependencies {
         testImplementation("org.junit.jupiter:junit-jupiter:5.8.0-M1")
