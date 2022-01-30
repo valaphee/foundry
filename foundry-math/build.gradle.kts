@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-dependencies { implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable-jvm:0.3.4") }
+dependencies { implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5") }
 
 publishing {
     publications {

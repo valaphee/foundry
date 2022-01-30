@@ -18,16 +18,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("com.palantir.git-version") version "0.12.3"
-    kotlin("jvm") version "1.5.30-M1"
+    kotlin("jvm") version "1.6.10"
     `maven-publish`
     signing
-}
-
-allprojects {
-    repositories {
-        mavenCentral()
-        mavenLocal()
-    }
 }
 
 subprojects {
@@ -40,6 +33,11 @@ subprojects {
     val versionDetails: groovy.lang.Closure<com.palantir.gradle.gitversion.VersionDetails> by extra
     val details = versionDetails()
     version = "${details.lastTag}.${details.commitDistance}"
+
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
 
     tasks {
         withType<JavaCompile> {
