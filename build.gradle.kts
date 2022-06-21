@@ -23,6 +23,13 @@ plugins {
     signing
 }
 
+allprojects {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+}
+
 subprojects {
     apply(plugin = "com.palantir.git-version")
     apply(plugin = "kotlin")
@@ -33,11 +40,6 @@ subprojects {
     val versionDetails: groovy.lang.Closure<com.palantir.gradle.gitversion.VersionDetails> by extra
     val details = versionDetails()
     version = "${details.lastTag}.${details.commitDistance}"
-
-    repositories {
-        mavenCentral()
-        mavenLocal()
-    }
 
     tasks {
         withType<JavaCompile> {
